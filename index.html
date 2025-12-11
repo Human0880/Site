@@ -348,7 +348,7 @@
                        id="main-logo"
                        alt="HUMAN0880 Logo" 
                        class="relative h-24 md:h-40 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]" 
-                       onerror="this.onerror=null; this.src='https://placehold.co/600x150/000000/FFFFFF/png?text=logo.svg+Not+Found'; alert('Файл IMG/logo.svg не знайдено. Переконайтеся, що папка IMG існує поруч з index.html');"
+                       onerror="this.onerror=null; this.src='https://placehold.co/600x150/000000/FFFFFF/png?text=HUMAN0880+LOGO'; /* Alert removed for smoother preview */"
                     />
                 </div>
             </div>
@@ -801,7 +801,7 @@
                     const imgPath2 = `IMG/${item.filePrefix} 2.jpg`; 
                     stackHTML += `
                         <div class="stack-card stack-card-2 absolute inset-0 w-full h-full rounded-xl overflow-hidden shadow-xl opacity-0 transform scale-95 transition-all duration-500 z-10">
-                            <img src="${imgPath2}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100" onerror="this.style.display='none'">
+                            <img src="${imgPath2}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/222/555?text=Img+2'">
                         </div>
                     `;
                 }
@@ -811,14 +811,14 @@
                     const imgPath3 = `IMG/${item.filePrefix} 3.jpg`;
                     stackHTML += `
                         <div class="stack-card stack-card-3 absolute inset-0 w-full h-full rounded-xl overflow-hidden shadow-xl opacity-0 transform scale-95 transition-all duration-500 z-0">
-                            <img src="${imgPath3}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100" onerror="this.style.display='none'">
+                            <img src="${imgPath3}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/222/555?text=Img+3'">
                         </div>
                     `;
                 }
                 
                 // For Social Media (up to 6 images)
                 if (item.filePrefix === 'Social Media' && item.imgCount > 3) {
-                     for (let i = 4; i <= item.imgCount; i++) {
+                      for (let i = 4; i <= item.imgCount; i++) {
                         const extraImgPath = `IMG/${item.filePrefix} ${i}.jpg`;
                          // We don't stack these, but we ensure the path exists for cycling
                         stackHTML += `<img data-src="${extraImgPath}" style="display:none;" data-index="${i}" onerror="this.style.display='none'">`;
@@ -833,7 +833,7 @@
                             src="${mainImgPath}" 
                             alt="${item.title}" 
                             class="w-full h-full object-cover project-image"
-                            onerror="this.parentElement.innerHTML='<div class=\\'flex items-center justify-center h-full text-zinc-600\\'>Image not found</div>'"
+                            onerror="this.src='https://placehold.co/600x400/18181b/a855f7?text=${item.title.replace(' ','+')}'"
                         >
                         
                         <!-- INVERTED HOVER OVERLAY (Visible by default) -->
@@ -872,8 +872,9 @@
                     };
                     tempImg.onerror = () => {
                         // Handle error gracefully, or just stay on the last image
+                        // For this demo, we swap to a placeholder if local file is missing
+                        img.src = `https://placehold.co/600x400/18181b/a855f7?text=${item.title}+${currentIndex}`;
                         img.style.opacity = '1';
-                        // Optionally reset index or show error message
                     };
                     
                     // Start fade out animation immediately
