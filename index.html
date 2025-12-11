@@ -96,14 +96,12 @@
         .card-3d {
             transform-style: preserve-3d;
             will-change: transform;
-            /* Ефект "вдавленості" для картки */
             box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .card-content-3d {
             transform: translateZ(60px); 
             transform-style: preserve-3d;
-            /* Тінь для тексту, щоб він "висів" у повітрі */
             filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5));
         }
         
@@ -116,7 +114,7 @@
         .delay-200 { transition-delay: 200ms; }
         .delay-300 { transition-delay: 300ms; }
 
-        /* Cursor Glow Effect - Ефект світлячка */
+        /* Cursor Glow Effect */
         #cursor-glow {
             position: fixed;
             top: 0;
@@ -131,7 +129,7 @@
             transition: opacity 0.3s ease;
         }
 
-        /* Typewriter Cursor - Курсор для друкарської машинки */
+        /* Typewriter Cursor */
         .typewriter-cursor {
             display: inline-block;
             width: 2px;
@@ -162,26 +160,32 @@
 
     <!-- Navbar -->
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6 bg-transparent">
-        <div class="container mx-auto px-6 flex justify-center items-center relative">
+        <div class="container mx-auto px-6 flex justify-between items-center relative">
             
+            <!-- Language Switcher (Left side mobile / part of nav desktop) -->
+            <!-- Removed border, padding, background classes -->
+            <button id="lang-switch" class="text-white font-bold text-sm tracking-wider hover:text-purple-400 transition-colors z-50">
+                UA / EN
+            </button>
+
             <!-- Desktop Menu -->
-            <div class="hidden md:flex space-x-12">
-                <a href="#services" class="text-gray-300 hover:text-white transition-colors uppercase text-sm tracking-widest font-medium relative group hover:scale-110 duration-300 inline-block">
+            <div class="hidden md:flex space-x-12 absolute left-1/2 transform -translate-x-1/2">
+                <a href="#services" id="nav-services" class="text-gray-300 hover:text-white transition-colors uppercase text-sm tracking-widest font-medium relative group hover:scale-110 duration-300 inline-block">
                     Послуги
                     <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-500 transition-all duration-300 group-hover:w-full"></span>
                 </a>
-                <a href="#portfolio" class="text-gray-300 hover:text-white transition-colors uppercase text-sm tracking-widest font-medium relative group hover:scale-110 duration-300 inline-block">
+                <a href="#portfolio" id="nav-portfolio" class="text-gray-300 hover:text-white transition-colors uppercase text-sm tracking-widest font-medium relative group hover:scale-110 duration-300 inline-block">
                     Портфоліо
                     <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-500 transition-all duration-300 group-hover:w-full"></span>
                 </a>
-                <a href="#contact" class="text-gray-300 hover:text-white transition-colors uppercase text-sm tracking-widest font-medium relative group hover:scale-110 duration-300 inline-block">
+                <a href="#contact" id="nav-contact" class="text-gray-300 hover:text-white transition-colors uppercase text-sm tracking-widest font-medium relative group hover:scale-110 duration-300 inline-block">
                     Контакти
                     <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-500 transition-all duration-300 group-hover:w-full"></span>
                 </a>
             </div>
 
             <!-- Mobile Menu Button -->
-            <div class="md:hidden absolute right-6">
+            <div class="md:hidden">
                 <button id="menu-btn" class="text-white focus:outline-none">
                     <i data-lucide="menu"></i>
                 </button>
@@ -191,16 +195,16 @@
         <!-- Mobile Menu Dropdown -->
         <div id="mobile-menu" class="hidden md:hidden bg-zinc-900 border-t border-zinc-800 overflow-hidden transition-all duration-300 ease-in-out">
             <div class="flex flex-col p-6 space-y-4">
-                <a href="#services" class="text-left text-gray-300 hover:text-white py-2 mobile-link">Послуги</a>
-                <a href="#portfolio" class="text-left text-gray-300 hover:text-white py-2 mobile-link">Портфоліо</a>
-                <a href="#contact" class="text-left text-gray-300 hover:text-white py-2 mobile-link">Контакти</a>
+                <a href="#services" class="text-left text-gray-300 hover:text-white py-2 mobile-link" id="mob-nav-services">Послуги</a>
+                <a href="#portfolio" class="text-left text-gray-300 hover:text-white py-2 mobile-link" id="mob-nav-portfolio">Портфоліо</a>
+                <a href="#contact" class="text-left text-gray-300 hover:text-white py-2 mobile-link" id="mob-nav-contact">Контакти</a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden bg-black text-white perspective-1000">
-        <!-- Abstract Background Shapes (IDs added for Parallax) -->
+        <!-- Abstract Background Shapes -->
         <div id="blob-1" class="absolute top-20 left-10 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-[80px] opacity-30 animate-blob transition-transform duration-100 ease-out"></div>
         <div id="blob-2" class="absolute bottom-20 right-10 w-96 h-96 bg-indigo-600 rounded-full mix-blend-multiply filter blur-[80px] opacity-30 animate-blob-reverse transition-transform duration-100 ease-out"></div>
         
@@ -214,7 +218,7 @@
                 <!-- Levitating Logo Container -->
                 <div class="relative group p-4 animate-float">
                     <div class="absolute inset-0 bg-gradient-to-r from-purple-600/30 to-pink-600/30 rounded-full blur-2xl animate-pulse"></div>
-                    <!-- Local Logo Path: IMG/logo.svg -->
+                    <!-- Local Logo Path -->
                     <img 
                        src="IMG/logo.svg" 
                        id="main-logo"
@@ -224,6 +228,10 @@
                     />
                 </div>
             </div>
+            
+            <p id="hero-desc" class="hidden text-gray-400 max-w-2xl mx-auto text-lg md:text-xl mb-10 leading-relaxed reveal delay-200">
+                <!-- Text populated by JS -->
+            </p>
         </div>
     </section>
 
@@ -231,9 +239,9 @@
     <section id="services" class="py-24 bg-zinc-950 text-white relative">
         <div class="container mx-auto px-6 relative z-10">
             <div class="text-center mb-20 reveal">
-                <h2 class="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">Наші Послуги</h2>
+                <h2 id="services-title" class="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">Наші Послуги</h2>
                 <div class="h-1 w-24 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full transition-all duration-1000 ease-out" style="width: 6rem;"></div>
-                <p class="mt-6 text-gray-400 text-lg max-w-2xl mx-auto">
+                <p id="services-desc" class="mt-6 text-gray-400 text-lg max-w-2xl mx-auto">
                     Повний спектр дизайн-рішень для розвитку вашого бренду в офлайн та онлайн середовищі.
                 </p>
             </div>
@@ -249,11 +257,11 @@
         <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
                 <div>
-                    <h2 class="text-4xl md:text-5xl font-bold mb-4">Останні Роботи</h2>
+                    <h2 id="portfolio-title" class="text-4xl md:text-5xl font-bold mb-4">Останні Роботи</h2>
                     <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
                 </div>
                 <a href="#" class="hidden md:flex items-center text-gray-400 hover:text-white transition-colors mt-4 md:mt-0 font-medium hover:translate-x-2 duration-300">
-                    Переглянути все портфоліо <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
+                    <span id="portfolio-link-text">Переглянути все портфоліо</span> <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
                 </a>
             </div>
 
@@ -262,7 +270,7 @@
             </div>
             
             <div class="mt-10 text-center md:hidden reveal">
-               <a href="#" class="text-white border-b border-white pb-1 inline-flex items-center">Переглянути все <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i></a>
+               <a href="#" class="text-white border-b border-white pb-1 inline-flex items-center"><span id="portfolio-mobile-link">Переглянути все</span> <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i></a>
             </div>
         </div>
     </section>
@@ -276,7 +284,7 @@
             
             <!-- Header centered at the top -->
             <div class="reveal mb-16 text-center max-w-5xl mx-auto">
-                <h2 class="text-4xl md:text-6xl font-bold">Давайте створимо щось <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">унікальне</span> разом.</h2>
+                <h2 id="contact-title" class="text-4xl md:text-6xl font-bold">Давайте створимо щось <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">унікальне</span> разом.</h2>
             </div>
 
             <!-- Grid for Links and Form -->
@@ -285,7 +293,7 @@
                 <div class="reveal delay-100 flex flex-col justify-start h-full pt-4">
                     
                     <!-- Subtitle moved here (Left side) -->
-                    <p class="text-gray-400 text-lg leading-relaxed mb-10 max-w-lg">
+                    <p id="contact-subtitle" class="text-gray-400 text-lg leading-relaxed mb-10 max-w-lg">
                         Готові розпочати проект? Напишіть нам, і ми обговоримо, як можемо допомогти вашому бізнесу вирости через дизайн.
                     </p>
 
@@ -321,7 +329,7 @@
                         
                         <!-- Services Selection -->
                         <div>
-                            <h3 class="text-xl font-bold text-white mb-6">Що вас цікавить?</h3>
+                            <h3 id="contact-question" class="text-xl font-bold text-white mb-6">Що вас цікавить?</h3>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="service-options">
                                 <!-- Generated by JS -->
                             </div>
@@ -331,11 +339,11 @@
                         <div class="space-y-4">
                             <a id="btn-telegram" href="https://t.me/Human0880" target="_blank" class="w-full bg-[#229ED9] hover:bg-[#1E8BBF] text-white font-bold py-4 rounded-lg transition-all shadow-lg hover:shadow-[#229ED9]/30 flex items-center justify-center transform hover:scale-[1.02] active:scale-95 group">
                                 <i data-lucide="send" class="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform"></i>
-                                Написати в Telegram
+                                <span id="btn-telegram-text">Написати в Telegram</span>
                             </a>
                             <a href="https://instagram.com/human0880design" target="_blank" class="w-full bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] hover:opacity-90 text-white font-bold py-4 rounded-lg transition-all shadow-lg hover:shadow-[#fd1d1d]/30 flex items-center justify-center transform hover:scale-[1.02] active:scale-95 group">
                                 <i data-lucide="instagram" class="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform"></i>
-                                Написати в Instagram
+                                <span id="btn-instagram-text">Написати в Instagram</span>
                             </a>
                         </div>
 
@@ -354,7 +362,7 @@
             
             <!-- Added whitespace-nowrap to force one line -->
             <div class="text-gray-500 text-sm text-center whitespace-nowrap">
-                © <span id="year"></span> Human0880 Design. Всі права захищено.
+                © <span id="year"></span> Human0880 Design. <span id="footer-rights">Всі права захищено.</span>
             </div>
             
             <div class="flex justify-center md:justify-end space-x-6">
@@ -366,20 +374,266 @@
 
     <!-- JavaScript -->
     <script>
-        // Data for Services
-        const services = [
-            { title: "Розробка Фірмового Стилю", description: "Від логотипу до візиток, я забезпечу вас унікальним брендбуком, який розповість історію вашого бренду.", icon: "palette", color: "from-pink-500 to-rose-500" },
-            { title: "Зовнішня Реклама", description: "Залучіть більше уваги з креативною та ефектною зовнішньою рекламою, яка виділить вас з натовпу.", icon: "monitor", color: "from-purple-500 to-indigo-500" },
-            { title: "Презентації", description: "Підкресліть вашу експертизу через професійно розроблені презентації, що залишають тривале враження.", icon: "presentation", color: "from-blue-500 to-cyan-500" },
-            { title: "Дизайн Брошур та Постерів", description: "Перетворіть ваші ідеї на реальність з дизайном, що говорить. Журнали, постери, флаєри.", icon: "book-open", color: "from-teal-500 to-emerald-500" },
-            { title: "Запрошення до Свят", description: "Створіть незабутнє враження з унікальними та особистими запрошеннями на будь-яку подію.", icon: "mail", color: "from-green-500 to-lime-500" },
-            { title: "Банери для Соцмереж", description: "Покращіть Ваш онлайн-присутність з яскравими та запам'ятовуючими банерами для Instagram та Facebook.", icon: "share-2", color: "from-yellow-500 to-amber-500" },
-            { title: "Концепт Упаковки", description: "Виділіть ваш продукт на полицях з оригінальним дизайном упаковки, який продає.", icon: "package", color: "from-orange-500 to-red-500" },
-            { title: "Обробка Фото", description: "Додайте світлинам яскравості та професійності. Ретуш, корекція кольору та художня обробка.", icon: "camera", color: "from-red-500 to-pink-500" },
-            { title: "Веб-Дизайн / Дизайн APP", description: "Забезпечте своєму сайту чи додатку неповторний вигляд, UX/UI дизайн та зручність користування.", icon: "smartphone", color: "from-indigo-500 to-purple-500" }
-        ];
+        // --- TRANSLATIONS CONFIGURATION ---
+        const translations = {
+            ua: {
+                nav: { services: "Послуги", portfolio: "Портфоліо", contact: "Контакти" },
+                hero: {
+                    typewriter: "Visual Identity & Web Design", 
+                    desc: "Ми перетворюємо хаос ідей на структуру дизайну. Комплексні рішення для вашого бізнесу: від логотипу до веб-сайту."
+                },
+                services: {
+                    title: "Наші Послуги",
+                    desc: "Повний спектр дизайн-рішень для розвитку вашого бренду в офлайн та онлайн середовищі.",
+                    items: [
+                        { title: "Розробка Фірмового Стилю", description: "Від логотипу до візиток, я забезпечу вас унікальним брендбуком, який розповість історію вашого бренду.", icon: "palette", color: "from-pink-500 to-rose-500" },
+                        { title: "Зовнішня Реклама", description: "Залучіть більше уваги з креативною та ефектною зовнішньою рекламою, яка виділить вас з натовпу.", icon: "monitor", color: "from-purple-500 to-indigo-500" },
+                        { title: "Презентації", description: "Підкресліть вашу експертизу через професійно розроблені презентації, що залишають тривале враження.", icon: "presentation", color: "from-blue-500 to-cyan-500" },
+                        { title: "Дизайн Брошур та Постерів", description: "Перетворіть ваші ідеї на реальність з дизайном, що говорить. Журнали, постери, флаєри.", icon: "book-open", color: "from-teal-500 to-emerald-500" },
+                        { title: "Запрошення до Свят", description: "Створіть незабутнє враження з унікальними та особистими запрошеннями на будь-яку подію.", icon: "mail", color: "from-green-500 to-lime-500" },
+                        { title: "Банери для Соцмереж", description: "Покращіть Ваш онлайн-присутність з яскравими та запам'ятовуючими банерами для Instagram та Facebook.", icon: "share-2", color: "from-yellow-500 to-amber-500" },
+                        { title: "Концепт Упаковки", description: "Виділіть ваш продукт на полицях з оригінальним дизайном упаковки, який продає.", icon: "package", color: "from-orange-500 to-red-500" },
+                        { title: "Обробка Фото", description: "Додайте світлинам яскравості та професійності. Ретуш, корекція кольору та художня обробка.", icon: "camera", color: "from-red-500 to-pink-500" },
+                        { title: "Веб-Дизайн / Дизайн APP", description: "Забезпечте своєму сайту чи додатку неповторний вигляд, UX/UI дизайн та зручність користування.", icon: "smartphone", color: "from-indigo-500 to-purple-500" }
+                    ]
+                },
+                portfolio: {
+                    title: "Останні Роботи",
+                    linkText: "Переглянути все портфоліо",
+                    mobileLinkText: "Переглянути все",
+                    items: [
+                        { id: 1, category: "Web-Design", title: "NASA" },
+                        { id: 2, category: "Web-Design", title: "AI SPIN" },
+                        { id: 3, category: "SOCIAL MEDIA", title: "CRASH TV" },
+                        { id: 4, category: "SOCIAL MEDIA", title: "RETRO GHOST" },
+                        { id: 5, category: "SOCIAL MEDIA", title: "Back to the Future" },
+                        { id: 6, category: "SOCIAL MEDIA", title: "Wine 46" }
+                    ]
+                },
+                contact: {
+                    title: "Давайте створимо щось <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500'>унікальне</span> разом.",
+                    subtitle: "Готові розпочати проект? Напишіть нам, і ми обговоримо, як можемо допомогти вашому бізнесу вирости через дизайн.",
+                    question: "Що вас цікавить?",
+                    chips: ["Фірмовий Стиль", "Зовнішня Реклама", "Презентації", "Поліграфія", "Запрошення", "Банери", "Упаковка", "Обробка Фото", "Веб-Дизайн"],
+                    btnTelegram: "Написати в Telegram",
+                    btnInstagram: "Написати в Instagram",
+                    telegramMsgPrefix: "Вітаю! Мене цікавить послуга: "
+                },
+                footer: { rights: "Всі права захищено." }
+            },
+            en: {
+                nav: { services: "Services", portfolio: "Portfolio", contact: "Contact" },
+                hero: {
+                    typewriter: "Visual Identity & Web Design",
+                    desc: "We turn chaos of ideas into design structure. Complex solutions for your business: from logo to website."
+                },
+                services: {
+                    title: "Our Services",
+                    desc: "Full range of design solutions for your brand development in offline and online environments.",
+                    items: [
+                        { title: "Brand Identity", description: "From logo to business cards, I will provide you with a unique brandbook that tells your brand's story.", icon: "palette", color: "from-pink-500 to-rose-500" },
+                        { title: "Outdoor Advertising", description: "Attract more attention with creative and effective outdoor advertising that stands out from the crowd.", icon: "monitor", color: "from-purple-500 to-indigo-500" },
+                        { title: "Presentations", description: "Highlight your expertise through professionally designed presentations that leave a lasting impression.", icon: "presentation", color: "from-blue-500 to-cyan-500" },
+                        { title: "Brochures & Posters", description: "Turn your ideas into reality with design that speaks. Magazines, posters, flyers.", icon: "book-open", color: "from-teal-500 to-emerald-500" },
+                        { title: "Event Invitations", description: "Create an unforgettable impression with unique and personal invitations for any event.", icon: "mail", color: "from-green-500 to-lime-500" },
+                        { title: "Social Media Banners", description: "Improve your online presence with bright and memorable banners for Instagram and Facebook.", icon: "share-2", color: "from-yellow-500 to-amber-500" },
+                        { title: "Packaging Concept", description: "Highlight your product on shelves with original packaging design that sells.", icon: "package", color: "from-orange-500 to-red-500" },
+                        { title: "Photo Editing", description: "Add brightness and professionalism to photos. Retouching, color correction, and artistic processing.", icon: "camera", color: "from-red-500 to-pink-500" },
+                        { title: "Web Design / APP Design", description: "Ensure your site or app has a unique look, UX/UI design, and usability.", icon: "smartphone", color: "from-indigo-500 to-purple-500" }
+                    ]
+                },
+                portfolio: {
+                    title: "Latest Works",
+                    linkText: "View All Portfolio",
+                    mobileLinkText: "View All",
+                    items: [
+                        { id: 1, category: "Web-Design", title: "NASA" },
+                        { id: 2, category: "Web-Design", title: "AI SPIN" },
+                        { id: 3, category: "SOCIAL MEDIA", title: "CRASH TV" },
+                        { id: 4, category: "SOCIAL MEDIA", title: "RETRO GHOST" },
+                        { id: 5, category: "SOCIAL MEDIA", title: "Back to the Future" },
+                        { id: 6, category: "SOCIAL MEDIA", title: "Wine 46" }
+                    ]
+                },
+                contact: {
+                    title: "Let's create something <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500'>unique</span> together.",
+                    subtitle: "Ready to start a project? Write to us, and we will discuss how we can help your business grow through design.",
+                    question: "What are you interested in?",
+                    chips: ["Brand Identity", "Outdoor Ads", "Presentations", "Polygraphy", "Invitations", "Banners", "Packaging", "Photo Edit", "Web Design"],
+                    btnTelegram: "Write on Telegram",
+                    btnInstagram: "Write on Instagram",
+                    telegramMsgPrefix: "Hello! I am interested in: "
+                },
+                footer: { rights: "All rights reserved." }
+            }
+        };
 
-        // 3D Tilt Effect Logic
+        // Current Language State
+        let currentLang = 'ua';
+        let selectedService = "";
+
+        // Observer (Moved up to fix ReferenceError)
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // --- RENDER FUNCTIONS ---
+
+        function updateStaticText() {
+            const t = translations[currentLang];
+            
+            // Nav
+            document.getElementById('nav-services').childNodes[0].nodeValue = t.nav.services;
+            document.getElementById('nav-portfolio').childNodes[0].nodeValue = t.nav.portfolio;
+            document.getElementById('nav-contact').childNodes[0].nodeValue = t.nav.contact;
+            
+            document.getElementById('mob-nav-services').textContent = t.nav.services;
+            document.getElementById('mob-nav-portfolio').textContent = t.nav.portfolio;
+            document.getElementById('mob-nav-contact').textContent = t.nav.contact;
+
+            // Hero
+            // Typewriter is handled separately to restart animation
+            // Hero Desc is technically hidden in previous version but accessible via code if needed
+            const heroDesc = document.getElementById('hero-desc');
+            if(heroDesc) heroDesc.textContent = t.hero.desc;
+
+            // Services
+            document.getElementById('services-title').textContent = t.services.title;
+            document.getElementById('services-desc').textContent = t.services.desc;
+
+            // Portfolio
+            document.getElementById('portfolio-title').textContent = t.portfolio.title;
+            document.getElementById('portfolio-link-text').textContent = t.portfolio.linkText;
+            document.getElementById('portfolio-mobile-link').textContent = t.portfolio.mobileLinkText;
+
+            // Contact
+            document.getElementById('contact-title').innerHTML = t.contact.title;
+            document.getElementById('contact-subtitle').textContent = t.contact.subtitle;
+            document.getElementById('contact-question').textContent = t.contact.question;
+            document.getElementById('btn-telegram-text').textContent = t.contact.btnTelegram;
+            document.getElementById('btn-instagram-text').textContent = t.contact.btnInstagram;
+
+            // Footer
+            document.getElementById('footer-rights').textContent = t.footer.rights;
+        }
+
+        function renderServices() {
+            const servicesGrid = document.getElementById('services-grid');
+            servicesGrid.innerHTML = '';
+            const t = translations[currentLang];
+
+            t.services.items.forEach((service, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = "reveal h-full perspective-1000"; 
+                wrapper.style.transitionDelay = `${index * 50}ms`;
+
+                const card = document.createElement('div');
+                card.className = "bg-zinc-900/50 backdrop-blur-sm p-8 rounded-2xl border border-zinc-800 hover:border-purple-500/50 transition-colors duration-300 group h-full card-3d relative cursor-pointer";
+                
+                card.addEventListener('mousemove', handleTilt);
+                card.addEventListener('mouseleave', resetTilt);
+
+                card.innerHTML = `
+                    <div class="card-content-3d">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-lg icon-layer-3d">
+                            <i data-lucide="${service.icon}" class="w-7 h-7 text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4 group-hover:text-purple-400 transition-colors">${service.title}</h3>
+                        <p class="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">${service.description}</p>
+                    </div>
+                `;
+                wrapper.appendChild(card);
+                servicesGrid.appendChild(wrapper);
+            });
+            // Re-init lucide icons for new elements
+            lucide.createIcons();
+            // Re-observe for reveal
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        function renderPortfolio() {
+            const portfolioGrid = document.getElementById('portfolio-grid');
+            portfolioGrid.innerHTML = '';
+            const t = translations[currentLang];
+
+            t.portfolio.items.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "relative aspect-[4/3] bg-zinc-800 rounded-xl overflow-hidden group cursor-pointer border border-zinc-800 hover:border-zinc-600 transition-colors shadow-2xl reveal";
+                div.style.transitionDelay = `${index * 100}ms`;
+                
+                const imgPath = `IMG/IMG ${item.id}.jpg`;
+
+                div.innerHTML = `
+                    <img 
+                        src="${imgPath}" 
+                        alt="${item.title}" 
+                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'absolute inset-0 bg-zinc-800 flex items-center justify-center text-zinc-500 font-bold text-center p-4\\'>${imgPath} <br>not found</div>'"
+                    >
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8 backdrop-blur-[2px]">
+                        <span class="text-purple-400 text-sm font-bold uppercase tracking-wider mb-2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">${item.category}</span>
+                        <h3 class="text-2xl font-bold text-white translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-100">${item.title}</h3>
+                    </div>
+                `;
+                portfolioGrid.appendChild(div);
+            });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        function renderContactChips() {
+            const serviceOptionsContainer = document.getElementById('service-options');
+            serviceOptionsContainer.innerHTML = '';
+            const t = translations[currentLang];
+            
+            // Reset selected service when switching lang, or keep logic to find equivalent index (simplified: reset)
+            selectedService = ""; 
+            updateTelegramLink();
+
+            t.contact.chips.forEach(srv => {
+                const btn = document.createElement('button');
+                btn.textContent = srv;
+                btn.className = "service-btn border border-zinc-700 bg-zinc-900/50 text-gray-400 px-4 py-3 rounded-lg text-sm font-medium hover:border-purple-500 hover:text-white transition-all duration-200 text-left";
+                
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.service-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    selectedService = srv;
+                    updateTelegramLink();
+                });
+                
+                serviceOptionsContainer.appendChild(btn);
+            });
+        }
+
+        // --- TYPEWRITER LOGIC ---
+        let textToType = "";
+        const typeWriterElement = document.getElementById('typewriter-text');
+        let charIndex = 0;
+        let typeTimeout;
+
+        function startTypewriter() {
+            clearTimeout(typeTimeout);
+            textToType = translations[currentLang].hero.typewriter;
+            typeWriterElement.textContent = "";
+            charIndex = 0;
+            type();
+        }
+
+        function type() {
+            if (charIndex < textToType.length) {
+                typeWriterElement.textContent += textToType.charAt(charIndex);
+                charIndex++;
+                typeTimeout = setTimeout(type, 100); 
+            }
+        }
+
+        // --- 3D TILT LOGIC (Reused) ---
         function handleTilt(e) {
             const card = e.currentTarget;
             const rect = card.getBoundingClientRect();
@@ -387,12 +641,8 @@
             const y = e.clientY - rect.top;
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-            
-            // Calculate rotation (max 15deg for dramatic effect)
             const rotateX = ((y - centerY) / centerY) * -15; 
             const rotateY = ((x - centerX) / centerX) * 15;
-
-            // Apply rotation to CARD
             card.style.transition = 'transform 0.1s ease-out';
             card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         }
@@ -403,111 +653,46 @@
             card.style.transform = 'rotateX(0) rotateY(0)';
         }
 
-        // Render Services with 3D Wrapper
-        const servicesGrid = document.getElementById('services-grid');
-        services.forEach((service, index) => {
-            // Wrapper creates the perspective
-            const wrapper = document.createElement('div');
-            wrapper.className = "reveal h-full perspective-1000"; 
-            wrapper.style.transitionDelay = `${index * 50}ms`;
-
-            // Card handles the tilt
-            const card = document.createElement('div');
-            card.className = "bg-zinc-900/50 backdrop-blur-sm p-8 rounded-2xl border border-zinc-800 hover:border-purple-500/50 transition-colors duration-300 group h-full card-3d relative cursor-pointer";
-            
-            // Attach events
-            card.addEventListener('mousemove', handleTilt);
-            card.addEventListener('mouseleave', resetTilt);
-
-            // Inner content wrapped for depth effect
-            card.innerHTML = `
-                <div class="card-content-3d">
-                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-lg icon-layer-3d">
-                        <i data-lucide="${service.icon}" class="w-7 h-7 text-white"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4 group-hover:text-purple-400 transition-colors">${service.title}</h3>
-                    <p class="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">${service.description}</p>
-                </div>
-            `;
-            wrapper.appendChild(card);
-            servicesGrid.appendChild(wrapper);
-        });
-
-        // Data for Portfolio
-        const portfolioItems = [
-            { id: 1, category: "Web-Design", title: "NASA" },
-            { id: 2, category: "Web-Design", title: "AI SPIN" },
-            { id: 3, category: "SOCIAL MEDIA", title: "CRASH TV" },
-            { id: 4, category: "SOCIAL MEDIA", title: "RETRO GHOST" },
-            { id: 5, category: "SOCIAL MEDIA", title: "Back to the Future" },
-            { id: 6, category: "SOCIAL MEDIA", title: "Wine 46" }
-        ];
-
-        // Render Portfolio
-        const portfolioGrid = document.getElementById('portfolio-grid');
-        portfolioItems.forEach((item, index) => {
-            const div = document.createElement('div');
-            div.className = "relative aspect-[4/3] bg-zinc-800 rounded-xl overflow-hidden group cursor-pointer border border-zinc-800 hover:border-zinc-600 transition-colors shadow-2xl reveal";
-            div.style.transitionDelay = `${index * 100}ms`;
-            
-            // Generate Local path for image
-            // Path: IMG/IMG 1.jpg
-            const imgPath = `IMG/IMG ${item.id}.jpg`;
-
-            div.innerHTML = `
-                <img 
-                    src="${imgPath}" 
-                    alt="${item.title}" 
-                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'absolute inset-0 bg-zinc-800 flex items-center justify-center text-zinc-500 font-bold text-center p-4\\'>${imgPath} <br>not found</div>'"
-                >
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8 backdrop-blur-[2px]">
-                    <span class="text-purple-400 text-sm font-bold uppercase tracking-wider mb-2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">${item.category}</span>
-                    <h3 class="text-2xl font-bold text-white translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-100">${item.title}</h3>
-                </div>
-            `;
-            portfolioGrid.appendChild(div);
-        });
-
-        // CONTACT SECTION INTERACTIVITY
-        const serviceOptionsContainer = document.getElementById('service-options');
-        // Simplified service names for chips
-        const contactServices = [
-            "Фірмовий Стиль", "Зовнішня Реклама", "Презентації", 
-            "Поліграфія", "Запрошення", "Банери", 
-            "Упаковка", "Обробка Фото", "Веб-Дизайн"
-        ];
-        
-        let selectedService = "";
-
-        // Generate chips
-        contactServices.forEach(srv => {
-            const btn = document.createElement('button');
-            btn.textContent = srv;
-            btn.className = "service-btn border border-zinc-700 bg-zinc-900/50 text-gray-400 px-4 py-3 rounded-lg text-sm font-medium hover:border-purple-500 hover:text-white transition-all duration-200 text-left";
-            
-            btn.addEventListener('click', () => {
-                // Deselect all
-                document.querySelectorAll('.service-btn').forEach(b => b.classList.remove('selected'));
-                // Select clicked
-                btn.classList.add('selected');
-                selectedService = srv;
-                updateTelegramLink();
-            });
-            
-            serviceOptionsContainer.appendChild(btn);
-        });
-
+        // --- HELPER LOGIC ---
         function updateTelegramLink() {
             const telegramBtn = document.getElementById('btn-telegram');
             const baseUrl = "https://t.me/Human0880";
             if (selectedService) {
-                const message = encodeURIComponent(`Вітаю! Мене цікавить послуга: ${selectedService}`);
+                const prefix = translations[currentLang].contact.telegramMsgPrefix;
+                const message = encodeURIComponent(`${prefix}${selectedService}`);
                 telegramBtn.href = `${baseUrl}?text=${message}`;
             } else {
                 telegramBtn.href = baseUrl;
             }
         }
+
+        function switchLanguage() {
+            currentLang = currentLang === 'ua' ? 'en' : 'ua';
+            // Update button text logic if needed, but here it's static UA / EN
+            // Or highlight active lang
+            const btn = document.getElementById('lang-switch');
+            btn.innerHTML = currentLang === 'ua' ? '<span class="text-purple-400">UA</span> / EN' : 'UA / <span class="text-purple-400">EN</span>';
+
+            updateStaticText();
+            renderServices();
+            renderPortfolio();
+            renderContactChips();
+            startTypewriter();
+        }
+
+        // --- INITIALIZATION ---
+        
+        // Language Switch Event
+        document.getElementById('lang-switch').addEventListener('click', switchLanguage);
+
+        // Initial Render
+        // Set initial button state
+        document.getElementById('lang-switch').innerHTML = '<span class="text-purple-400">UA</span> / EN';
+        updateStaticText();
+        renderServices();
+        renderPortfolio();
+        renderContactChips();
+        startTypewriter(); // Starts automatically
 
         // Initialize Lucide Icons
         lucide.createIcons();
@@ -542,12 +727,11 @@
             });
         });
 
-        // Scroll Logic: Navbar glass effect and Progress Bar
+        // Scroll Logic
         const navbar = document.getElementById('navbar');
         const progressBar = document.getElementById('progress-bar');
 
         window.addEventListener('scroll', () => {
-            // Navbar background
             if (window.scrollY > 50) {
                 navbar.classList.remove('bg-transparent', 'py-6');
                 navbar.classList.add('bg-black/80', 'backdrop-blur-md', 'py-4', 'shadow-lg', 'shadow-purple-900/10');
@@ -555,32 +739,13 @@
                 navbar.classList.add('bg-transparent', 'py-6');
                 navbar.classList.remove('bg-black/80', 'backdrop-blur-md', 'py-4', 'shadow-lg', 'shadow-purple-900/10');
             }
-
-            // Progress Bar
             const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
             const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrollPercentage = (scrollTop / scrollHeight) * 100;
             progressBar.style.width = scrollPercentage + '%';
         });
 
-        // Intersection Observer for Reveal Animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: "0px 0px -50px 0px"
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target); // Only animate once
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // CURSOR GLOW EFFECT Logic
+        // Cursor & Blob Logic
         const cursorGlow = document.getElementById('cursor-glow');
         const blob1 = document.getElementById('blob-1');
         const blob2 = document.getElementById('blob-2');
@@ -588,35 +753,14 @@
         document.addEventListener('mousemove', (e) => {
             const x = e.clientX;
             const y = e.clientY;
-            
-            // Move the glow
             cursorGlow.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
-
-            // Parallax Blobs
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
-            const moveX = (x - centerX) / 30; // Dividing to slow down the movement
+            const moveX = (x - centerX) / 30; 
             const moveY = (y - centerY) / 30;
-
             if(blob1) blob1.style.transform = `translate(${moveX * -1}px, ${moveY * -1}px)`;
             if(blob2) blob2.style.transform = `translate(${moveX}px, ${moveY}px)`;
         });
-
-        // TYPEWRITER EFFECT Logic
-        const textToType = "Visual Identity & Web Design";
-        const typeWriterElement = document.getElementById('typewriter-text');
-        let charIndex = 0;
-
-        function type() {
-            if (charIndex < textToType.length) {
-                typeWriterElement.textContent += textToType.charAt(charIndex);
-                charIndex++;
-                setTimeout(type, 100); // Speed of typing
-            }
-        }
-        
-        // Start typing after a short delay
-        setTimeout(type, 1000);
 
     </script>
 </body>
