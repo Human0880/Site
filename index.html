@@ -198,6 +198,12 @@
             /* При наведенні: Текст зникає */
             opacity: 0;
         }
+        
+        /* Зображення без сірого фону */
+        .project-image {
+            /* Збільшив тривалість для плавності */
+            transition: opacity 0.5s ease-in-out, transform 0.7s; 
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-purple-500 selection:text-white relative">
@@ -633,7 +639,7 @@
                 if (item.imgCount >= 2) {
                     const imgPath2 = `IMG/${item.filePrefix} 2.jpg`; 
                     stackHTML += `
-                        <div class="stack-card stack-card-2 absolute inset-0 w-full h-full rounded-xl overflow-hidden bg-zinc-800 shadow-xl opacity-0 transform scale-95 transition-all duration-500 z-10">
+                        <div class="stack-card stack-card-2 absolute inset-0 w-full h-full rounded-xl overflow-hidden shadow-xl opacity-0 transform scale-95 transition-all duration-500 z-10">
                             <img src="${imgPath2}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100" onerror="this.style.display='none'">
                         </div>
                     `;
@@ -643,7 +649,7 @@
                 if (item.imgCount >= 3) {
                     const imgPath3 = `IMG/${item.filePrefix} 3.jpg`;
                     stackHTML += `
-                        <div class="stack-card stack-card-3 absolute inset-0 w-full h-full rounded-xl overflow-hidden bg-zinc-800 shadow-xl opacity-0 transform scale-95 transition-all duration-500 z-0">
+                        <div class="stack-card stack-card-3 absolute inset-0 w-full h-full rounded-xl overflow-hidden shadow-xl opacity-0 transform scale-95 transition-all duration-500 z-0">
                             <img src="${imgPath3}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100" onerror="this.style.display='none'">
                         </div>
                     `;
@@ -660,12 +666,12 @@
 
                 // Main Card (Front)
                 stackHTML += `
-                    <div class="stack-card stack-card-1 absolute inset-0 w-full h-full rounded-xl overflow-hidden bg-zinc-800 border border-zinc-800 group-hover:border-zinc-600 transition-all duration-500 z-30 shadow-2xl">
+                    <div class="stack-card stack-card-1 absolute inset-0 w-full h-full rounded-xl overflow-hidden border border-zinc-800 group-hover:border-zinc-600 transition-all duration-500 z-30 shadow-2xl">
                         <img 
                             id="img-${index}"
                             src="${mainImgPath}" 
                             alt="${item.title}" 
-                            class="w-full h-full object-cover transition-opacity duration-300"
+                            class="w-full h-full object-cover project-image"
                             onerror="this.parentElement.innerHTML='<div class=\\'flex items-center justify-center h-full text-zinc-600\\'>Image not found</div>'"
                         >
                         
