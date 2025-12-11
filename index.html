@@ -285,9 +285,7 @@
                     <h2 id="portfolio-title" class="text-4xl md:text-5xl font-bold mb-4">Наші Роботи</h2>
                     <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
                 </div>
-                <a href="#" class="hidden md:flex items-center text-gray-400 hover:text-white transition-colors mt-4 md:mt-0 font-medium hover:translate-x-2 duration-300">
-                    <span id="portfolio-link-text">Переглянути все портфоліо</span> <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
-                </a>
+                <!-- REMOVED: Desktop "Переглянути все портфоліо" button -->
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12" id="portfolio-grid">
@@ -295,7 +293,7 @@
             </div>
             
             <div class="mt-10 text-center md:hidden reveal">
-               <a href="#" class="text-white border-b border-white pb-1 inline-flex items-center"><span id="portfolio-mobile-link">Переглянути все</span> <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i></a>
+               <!-- REMOVED: Mobile "Переглянути все" button -->
             </div>
         </div>
     </section>
@@ -431,8 +429,10 @@
                         { id: 2, title: "Логотипи", subtitle: "Унікальний знак бренду", filePrefix: "Logos", imgCount: 3 },
                         { id: 3, title: "Соціальні мережі", subtitle: "Оформлення та контент", filePrefix: "Social Media", imgCount: 6 },
                         { id: 4, title: "Баннери", subtitle: "Рекламна графіка", filePrefix: "Banners", imgCount: 3 },
-                        { id: 5, title: "Фірмовий стиль", subtitle: "Єдиний візуальний образ", filePrefix: "Brand Identity", imgCount: 3 },
-                        { id: 6, title: "Упаковка", subtitle: "Дизайн, що виділяє на полиці", filePrefix: "Packaging", imgCount: 2 }
+                        
+                        // REMOVED: Фірмовий стиль (id: 5)
+                        // REMOVED: Упаковка (id: 6)
+                        // Re-indexing logic is not required here, as we only need 4 items
                     ]
                 },
                 contact: {
@@ -476,8 +476,9 @@
                         { id: 2, title: "Logos", subtitle: "Unique brand marks", filePrefix: "Logos", imgCount: 3 },
                         { id: 3, title: "Social Media", subtitle: "Design & content", filePrefix: "Social Media", imgCount: 6 },
                         { id: 4, title: "Banners", subtitle: "Advertising graphics", filePrefix: "Banners", imgCount: 3 },
-                        { id: 5, title: "Brand Identity", subtitle: "Unified visual style", filePrefix: "Brand Identity", imgCount: 3 },
-                        { id: 6, title: "Packaging", subtitle: "Design that stands out", filePrefix: "Packaging", imgCount: 2 }
+                        
+                        // REMOVED: Brand Identity (id: 5)
+                        // REMOVED: Packaging (id: 6)
                     ]
                 },
                 contact: {
@@ -534,8 +535,9 @@
 
             // Portfolio
             document.getElementById('portfolio-title').textContent = t.portfolio.title;
-            document.getElementById('portfolio-link-text').textContent = t.portfolio.linkText;
-            document.getElementById('portfolio-mobile-link').textContent = t.portfolio.mobileLinkText;
+            // REMOVED: portfolio link text updates
+            // document.getElementById('portfolio-link-text').textContent = t.portfolio.linkText;
+            // document.getElementById('portfolio-mobile-link').textContent = t.portfolio.mobileLinkText;
 
             // Contact
             document.getElementById('contact-title').innerHTML = t.contact.title;
@@ -585,7 +587,10 @@
             portfolioGrid.innerHTML = '';
             const t = translations[currentLang];
 
-            t.portfolio.items.forEach((item, index) => {
+            // Filter to include only the first 4 items (Web Design, Logos, Social Media, Banners)
+            const filteredItems = t.portfolio.items.slice(0, 4); 
+
+            filteredItems.forEach((item, index) => {
                 let currentIndex = 1;
                 const container = document.createElement('div');
                 // Creating a relative container for the 3D stack
@@ -616,6 +621,15 @@
                             <img src="${imgPath3}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100" onerror="this.style.display='none'">
                         </div>
                     `;
+                }
+                
+                // For Social Media (up to 6 images)
+                if (item.filePrefix === 'Social Media' && item.imgCount > 3) {
+                     for (let i = 4; i <= item.imgCount; i++) {
+                        const extraImgPath = `IMG/${item.filePrefix} ${i}.jpg`;
+                         // We don't stack these, but we ensure the path exists for cycling
+                        stackHTML += `<img data-src="${extraImgPath}" style="display:none;" data-index="${i}" onerror="this.style.display='none'">`;
+                    }
                 }
 
                 // Main Card (Front)
