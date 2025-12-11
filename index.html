@@ -252,19 +252,7 @@
             transition: all 0.2s ease-out;
         }
         
-        /* Logo Reflection Effect */
-        .logo-reflection::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60%;
-            height: 100%;
-            background: linear-gradient(to top, rgba(168, 85, 247, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
-            pointer-events: none;
-            z-index: -1;
-        }
+        /* Logo Reflection Effect - REMOVED */
 
         /* Marquee Effect Container */
         .marquee-track {
@@ -360,8 +348,7 @@
             
             <div class="flex justify-center">
                 <!-- Levitating Logo Container -->
-                <!-- Added logo-reflection class -->
-                <div class="relative group p-4 animate-float logo-reflection">
+                <div class="relative group p-4 animate-float">
                     <div class="absolute inset-0 bg-gradient-to-r from-purple-600/30 to-pink-600/30 rounded-full blur-2xl animate-pulse"></div>
                     <!-- Local Logo Path -->
                     <img 
