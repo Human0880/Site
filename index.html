@@ -698,15 +698,26 @@
                     // Increment index
                     currentIndex = (currentIndex % item.imgCount) + 1;
                     
-                    // Fade out
+                    // The core change: Create a temporary image to pre-load the next image
+                    const nextImgPath = `IMG/${item.filePrefix} ${currentIndex}.jpg`;
+                    
+                    const tempImg = new Image();
+                    tempImg.onload = () => {
+                        // Once pre-loaded, update main image source and fade in
+                        img.src = nextImgPath;
+                        img.style.opacity = '1';
+                    };
+                    tempImg.onerror = () => {
+                        // Handle error gracefully, or just stay on the last image
+                        img.style.opacity = '1';
+                        // Optionally reset index or show error message
+                    };
+                    
+                    // Start fade out animation immediately
                     img.style.opacity = '0';
                     
-                    setTimeout(() => {
-                        img.src = `IMG/${item.filePrefix} ${currentIndex}.jpg`;
-                        // Fade in on load
-                        img.onload = () => { img.style.opacity = '1'; };
-                        // If image fails to load, it will stay faded out
-                    }, 200);
+                    // Start pre-loading the next image
+                    tempImg.src = nextImgPath;
                 });
 
                 portfolioGrid.appendChild(container);
