@@ -27,7 +27,7 @@
                         'blob-reverse': 'blob-reverse 18s infinite',
                         'cursor': 'cursor .75s step-end infinite',
                         'icon-jump': 'icon-jump 0.5s ease-in-out',
-                        'marquee': 'marquee 60s linear infinite', /* Додано keyframe marquee */
+                        'marquee': 'marquee 30s linear infinite', /* Зменшив швидкість для тексту */
                     },
                     keyframes: {
                         float: {
@@ -254,31 +254,23 @@
         
         /* Marquee Effect Container */
         .marquee-track {
-            animation: marquee 60s linear infinite;
+            animation: marquee 30s linear infinite; /* Зменшив швидкість для тексту */
             display: flex;
-            padding-right: 24px; /* Space for the last element */
             white-space: nowrap; /* Prevent wrapping of inner content */
-            width: 200%; /* Double width for seamless looping */
+            width: fit-content; /* Дозволяє вмісту займати необхідну ширину */
         }
         
-        .marquee-card-wrapper {
+        .stat-item {
             flex-shrink: 0;
-            width: 100%; /* Default width for one card */
-            /* Налаштування ширини для адаптивності: */
-            width: 95vw; /* 100% width on mobile */
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 700; /* font-bold */
+            margin-right: 3rem; /* 12 */
+            color: #d4d4d8; /* zinc-300 */
         }
-        
-        @media (min-width: 768px) {
-            .marquee-card-wrapper {
-                width: calc(50vw - 48px); /* Adjust width for desktop view (approx 2 cards + margins) */
-            }
+        .stat-item span {
+            color: #a855f7; /* purple-500 */
         }
-        
-        @media (min-width: 1024px) {
-             .marquee-card-wrapper {
-                width: calc(50vw - 48px);
-            }
-        }
+
     </style>
 </head>
 <body class="antialiased selection:bg-purple-500 selection:text-white relative">
@@ -364,6 +356,18 @@
             </p>
         </div>
     </section>
+    
+    <!-- Stats Marquee Section (NEW) -->
+    <section id="stats-marquee" class="bg-zinc-950 text-white py-4 border-t border-b border-zinc-800">
+        <div class="overflow-hidden">
+            <!-- stats-track needs to be wide enough to hold two copies of the content -->
+            <div id="stats-track" class="marquee-track hover:animation-pause">
+                <!-- Content duplicated by JS for seamless loop -->
+            </div>
+        </div>
+    </section>
+    <!-- End Stats Marquee Section -->
+
 
     <!-- Services Section -->
     <section id="services" class="py-24 bg-zinc-950 text-white relative">
@@ -512,6 +516,13 @@
                     typewriter: "Visual Identity & Web Design", 
                     desc: "Ми перетворюємо хаос ідей на структуру дизайну. Комплексні рішення для вашого бізнесу: від логотипу до веб-сайту."
                 },
+                stats: [
+                    "Веб-Дизайн <span>5 років досвіду</span>",
+                    "Графічний Дизайн <span>9+ років</span>",
+                    "Задоволених Клієнтів <span>70+</span>",
+                    "Проектів Завершено <span>100+</span>",
+                    "Брендів Розроблено <span>30+</span>"
+                ],
                 services: {
                     title: "Наші Послуги",
                     desc: "Повний спектр дизайн-рішень для розвитку вашого бренду в офлайн та онлайн середовищі.",
@@ -568,6 +579,13 @@
                     typewriter: "Visual Identity & Web Design",
                     desc: "We turn chaos of ideas into design structure. Complex solutions for your business: from logo to website."
                 },
+                stats: [
+                    "Web Design <span>5 years experience</span>",
+                    "Graphic Design <span>9+ years</span>",
+                    "Satisfied Clients <span>70+</span>",
+                    "Projects Completed <span>100+</span>",
+                    "Brands Developed <span>30+</span>"
+                ],
                 services: {
                     title: "Our Services",
                     desc: "Full range of design solutions for your brand development in offline and online environments.",
@@ -636,30 +654,21 @@
 
         // --- CAROUSEL HELPER FUNCTIONS (Moved UP) ---
         function updateCarouselDimensions() {
-             const carousel = document.getElementById('testimonial-carousel');
-             
-             // Define card width based on desktop (2 cards + margin) or mobile (1 card + margin)
-             const cardsPerView = window.innerWidth >= 1024 ? 2 : 1; 
-             const containerWidth = carousel.parentElement.clientWidth;
-             const gap = 24; // ml-6
-             
-             // Calculate the width of one card element
-             let calculatedCardWidth;
-             if (cardsPerView === 2) {
-                 calculatedCardWidth = (containerWidth - gap) / 2;
-             } else {
-                 calculatedCardWidth = containerWidth;
-             }
-             
-             // The marquee needs the content doubled for seamless loop.
-             // Total visible width + width of one entire copy.
-             const copyWidth = (calculatedCardWidth + gap) * translations[currentLang].testimonials.items.length;
-             carousel.style.width = `${copyWidth * 2}px`;
-             
-             // Update width of each card element
-             document.querySelectorAll('.testimonial-card').forEach(card => {
-                card.style.width = `${calculatedCardWidth}px`;
+             const track = document.getElementById('stats-track');
+             if (!track) return;
+
+             // Width of the content inside the track
+             let totalContentWidth = 0;
+             document.querySelectorAll('#stats-track .stat-item').forEach(item => {
+                 totalContentWidth += item.offsetWidth;
              });
+
+             // The track width must be double the content width for the seamless loop
+             track.style.width = `${totalContentWidth * 2}px`;
+
+             // Set animation speed based on width to maintain smoothness
+             const speed = totalContentWidth / 40; // 40px/sec is an estimate
+             track.style.animationDuration = `${speed}s`;
         }
         
         // This function is not used in marquee effect, but included for completeness if requested later.
@@ -710,9 +719,30 @@
             document.getElementById('footer-rights').textContent = t.footer.rights;
         }
 
-        function renderTestimonials() {
-            // REMOVED: Testimonial rendering logic since the section is gone
+        function renderStatsMarquee() {
+            const track = document.getElementById('stats-track');
+            if (!track) return;
+            track.innerHTML = '';
+            
+            const stats = translations[currentLang].stats;
+
+            // Render content twice for seamless loop
+            const renderContent = (items) => {
+                items.forEach(stat => {
+                    const div = document.createElement('div');
+                    div.className = "stat-item";
+                    div.innerHTML = stat;
+                    track.appendChild(div);
+                });
+            };
+
+            renderContent(stats);
+            renderContent(stats); // Duplicate for seamless loop
+            
+            // Wait for elements to be rendered, then calculate dimensions
+            setTimeout(updateCarouselDimensions, 50); 
         }
+
         
         function renderServices() {
             const servicesGrid = document.getElementById('services-grid');
@@ -945,10 +975,10 @@
             btn.innerHTML = currentLang === 'ua' ? '<span class="text-purple-400">UA</span> / EN' : 'UA / <span class="text-purple-400">EN</span>';
 
             updateStaticText();
+            renderStatsMarquee(); // Update stats marquee on language change
             renderServices();
             renderPortfolio();
             renderContactChips();
-            // renderTestimonials(); // Removed call
             startTypewriter();
         }
 
@@ -960,10 +990,10 @@
         // Initial Render
         document.getElementById('lang-switch').innerHTML = '<span class="text-purple-400">UA</span> / EN';
         updateStaticText();
+        renderStatsMarquee(); // Initial render for stats marquee
         renderServices();
         renderPortfolio();
         renderContactChips();
-        // renderTestimonials(); // Removed call
         startTypewriter();
 
         // Initialize Lucide Icons
@@ -1034,9 +1064,9 @@
             if(blob2) blob2.style.transform = `translate(${moveX}px, ${moveY}px)`;
         });
 
-        // Responsive Carousel Fix (now redundant, but kept if future elements need resizing logic)
+        // Responsive Marquee Fix
         window.addEventListener('resize', () => {
-            // updateCarouselDimensions(); // Removed since no carousel
+            renderStatsMarquee();
         });
 
     </script>
