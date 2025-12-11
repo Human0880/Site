@@ -88,7 +88,7 @@
             transform: translateY(0);
         }
 
-        /* 3D Card Styles - Enhanced Deep Effect */
+        /* 3D Card Styles */
         .perspective-1000 {
             perspective: 1200px;
         }
@@ -96,12 +96,14 @@
         .card-3d {
             transform-style: preserve-3d;
             will-change: transform;
+            /* Ефект "вдавленості" для картки */
             box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .card-content-3d {
             transform: translateZ(60px); 
             transform-style: preserve-3d;
+            /* Тінь для тексту, щоб він "висів" у повітрі */
             filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5));
         }
         
@@ -114,7 +116,7 @@
         .delay-200 { transition-delay: 200ms; }
         .delay-300 { transition-delay: 300ms; }
 
-        /* Cursor Glow Effect */
+        /* Cursor Glow Effect - Ефект світлячка */
         #cursor-glow {
             position: fixed;
             top: 0;
@@ -129,7 +131,7 @@
             transition: opacity 0.3s ease;
         }
 
-        /* Typewriter Cursor */
+        /* Typewriter Cursor - Курсор для друкарської машинки */
         .typewriter-cursor {
             display: inline-block;
             width: 2px;
@@ -191,12 +193,12 @@
 
     <!-- Hero Section -->
     <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden bg-black text-white perspective-1000">
-        <!-- Abstract Background Shapes (Added IDs for JS Parallax) -->
+        <!-- Abstract Background Shapes (IDs added for Parallax) -->
         <div id="blob-1" class="absolute top-20 left-10 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-[80px] opacity-30 animate-blob transition-transform duration-100 ease-out"></div>
         <div id="blob-2" class="absolute bottom-20 right-10 w-96 h-96 bg-indigo-600 rounded-full mix-blend-multiply filter blur-[80px] opacity-30 animate-blob-reverse transition-transform duration-100 ease-out"></div>
         
         <div class="container mx-auto px-6 z-10 text-center reveal active">
-            <!-- Typewriter Container -->
+            <!-- Typewriter Text Container -->
             <h2 class="text-sm md:text-base text-purple-400 font-bold uppercase mb-8 tracking-[0.3em] min-h-[1.5em]">
                 <span id="typewriter-text"></span><span class="typewriter-cursor"></span>
             </h2>
@@ -205,13 +207,13 @@
                 <!-- Levitating Logo Container -->
                 <div class="relative group p-4 animate-float">
                     <div class="absolute inset-0 bg-gradient-to-r from-purple-600/30 to-pink-600/30 rounded-full blur-2xl animate-pulse"></div>
-                    <!-- Local Logo Path -->
+                    <!-- Local Logo Path: IMG/logo.svg -->
                     <img 
-                       src="logo.svg" 
+                       src="IMG/logo.svg" 
                        id="main-logo"
                        alt="HUMAN0880 Logo" 
                        class="relative h-24 md:h-40 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]" 
-                       onerror="this.onerror=null; this.src='https://placehold.co/600x150/000000/FFFFFF/png?text=logo.svg+Not+Found'; alert('Файл logo.svg не знайдено. Переконайтеся, що файл лежить поруч з index.html');"
+                       onerror="this.onerror=null; this.src='https://placehold.co/600x150/000000/FFFFFF/png?text=logo.svg+Not+Found'; alert('Файл IMG/logo.svg не знайдено. Переконайтеся, що папка IMG існує поруч з index.html');"
                     />
                 </div>
             </div>
