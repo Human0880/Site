@@ -238,6 +238,13 @@
         .group:hover .click-indicator {
             opacity: 1;
         }
+
+        /* Service Chip Micro Animation */
+        .service-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 4px 10px rgba(168, 85, 247, 0.2);
+            transition: all 0.2s ease-out;
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-purple-500 selection:text-white relative">
@@ -628,6 +635,19 @@
         let currentSlide = 0;
         let slideWidth = 0;
         const totalSlides = translations.ua.testimonials.items.length;
+        let carouselInterval; // Added variable for auto-scroll interval
+
+        // --- CAROUSEL LOGIC ---
+        function startCarouselAutoScroll() {
+            if (carouselInterval) clearInterval(carouselInterval);
+            carouselInterval = setInterval(() => {
+                moveCarousel(1);
+            }, 5000); // Scrolls every 5 seconds
+        }
+
+        function stopCarouselAutoScroll() {
+            clearInterval(carouselInterval);
+        }
 
 
         // --- RENDER FUNCTIONS ---
@@ -693,10 +713,15 @@
                 carousel.appendChild(card);
             });
             
+            // Re-attach hover events to stop/start auto scroll
+            carousel.parentElement.onmouseenter = stopCarouselAutoScroll;
+            carousel.parentElement.onmouseleave = startCarouselAutoScroll;
+            
             // Set initial slide position and width based on current viewport
             updateCarouselDimensions();
             currentSlide = 0;
             updateCarouselPosition();
+            startCarouselAutoScroll(); // Start auto-scroll after rendering
         }
         
         function updateCarouselDimensions() {
