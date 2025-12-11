@@ -96,12 +96,14 @@
         .card-3d {
             transform-style: preserve-3d;
             will-change: transform;
+            /* Ефект "вдавленості" для картки */
             box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .card-content-3d {
             transform: translateZ(60px); 
             transform-style: preserve-3d;
+            /* Тінь для тексту, щоб він "висів" у повітрі */
             filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5));
         }
         
@@ -162,8 +164,7 @@
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6 bg-transparent">
         <div class="container mx-auto px-6 flex justify-between items-center relative">
             
-            <!-- Language Switcher (Left side mobile / part of nav desktop) -->
-            <!-- Removed border, padding, background classes -->
+            <!-- Language Switcher -->
             <button id="lang-switch" class="text-white font-bold text-sm tracking-wider hover:text-purple-400 transition-colors z-50">
                 UA / EN
             </button>
@@ -242,7 +243,7 @@
                 <h2 id="services-title" class="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">Наші Послуги</h2>
                 <div class="h-1 w-24 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full transition-all duration-1000 ease-out" style="width: 6rem;"></div>
                 <p id="services-desc" class="mt-6 text-gray-400 text-lg max-w-2xl mx-auto">
-                    Повний спектр дизайн-рішень для розвитку вашого бренду в офлайн та онлайн середовищі.
+                    <!-- Desc populated by JS -->
                 </p>
             </div>
 
@@ -257,7 +258,8 @@
         <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
                 <div>
-                    <h2 id="portfolio-title" class="text-4xl md:text-5xl font-bold mb-4">Останні Роботи</h2>
+                    <!-- Updated ID for title -->
+                    <h2 id="portfolio-title" class="text-4xl md:text-5xl font-bold mb-4">Наші Роботи</h2>
                     <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
                 </div>
                 <a href="#" class="hidden md:flex items-center text-gray-400 hover:text-white transition-colors mt-4 md:mt-0 font-medium hover:translate-x-2 duration-300">
@@ -398,7 +400,7 @@
                     ]
                 },
                 portfolio: {
-                    title: "Останні Роботи",
+                    title: "Наші Роботи",
                     linkText: "Переглянути все портфоліо",
                     mobileLinkText: "Переглянути все",
                     items: [
@@ -414,7 +416,7 @@
                     title: "Давайте створимо щось <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500'>унікальне</span> разом.",
                     subtitle: "Готові розпочати проект? Напишіть нам, і ми обговоримо, як можемо допомогти вашому бізнесу вирости через дизайн.",
                     question: "Що вас цікавить?",
-                    chips: ["Фірмовий Стиль", "Зовнішня Реклама", "Презентації", "Поліграфія", "Запрошення", "Банери", "Упаковка", "Обробка Фото", "Веб-Дизайн"],
+                    chips: ["Фірмовий Стиль", "Зовнішня Реклама", "Презентації", "Брошури/Постери", "Запрошення", "Банери", "Упаковка", "Обробка Фото", "Веб/APP Дизайн"],
                     btnTelegram: "Написати в Telegram",
                     btnInstagram: "Написати в Instagram",
                     telegramMsgPrefix: "Вітаю! Мене цікавить послуга: "
@@ -443,7 +445,7 @@
                     ]
                 },
                 portfolio: {
-                    title: "Latest Works",
+                    title: "Our Works",
                     linkText: "View All Portfolio",
                     mobileLinkText: "View All",
                     items: [
@@ -459,7 +461,7 @@
                     title: "Let's create something <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500'>unique</span> together.",
                     subtitle: "Ready to start a project? Write to us, and we will discuss how we can help your business grow through design.",
                     question: "What are you interested in?",
-                    chips: ["Brand Identity", "Outdoor Ads", "Presentations", "Polygraphy", "Invitations", "Banners", "Packaging", "Photo Edit", "Web Design"],
+                    chips: ["Brand Identity", "Outdoor Ads", "Presentations", "Brochures/Posters", "Invitations", "Banners", "Packaging", "Photo Edit", "Web/APP Design"],
                     btnTelegram: "Write on Telegram",
                     btnInstagram: "Write on Instagram",
                     telegramMsgPrefix: "Hello! I am interested in: "
