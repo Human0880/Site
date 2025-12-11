@@ -25,6 +25,7 @@
                         'float': 'float 6s ease-in-out infinite',
                         'blob': 'blob 15s infinite',
                         'blob-reverse': 'blob-reverse 18s infinite',
+                        'cursor': 'cursor .75s step-end infinite',
                     },
                     keyframes: {
                         float: {
@@ -42,6 +43,10 @@
                             '33%': { transform: 'translate(-50px, 30px) scale(1) rotate(-45deg)' },
                             '66%': { transform: 'translate(20px, -20px) scale(1.2) rotate(0deg)' },
                             '100%': { transform: 'translate(0px, 0px) scale(1.2) rotate(0deg)' },
+                        },
+                        cursor: {
+                            '0%, 100%': { borderColor: 'transparent' },
+                            '50%': { borderColor: '#a855f7' },
                         }
                     }
                 }
@@ -54,6 +59,7 @@
             background-color: #000;
             color: #fff;
             overflow-x: hidden;
+            cursor: default; /* Fallback */
         }
         
         /* Custom scrollbar */
@@ -84,25 +90,21 @@
 
         /* 3D Card Styles - Enhanced Deep Effect */
         .perspective-1000 {
-            perspective: 1200px; /* Трохи віддалена перспектива для кращого ефекту */
+            perspective: 1200px;
         }
         
         .card-3d {
             transform-style: preserve-3d;
             will-change: transform;
-            /* Внутрішня тінь створює ефект заглиблення фону */
             box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* Контейнер контенту "вилітає" на користувача */
         .card-content-3d {
             transform: translateZ(60px); 
             transform-style: preserve-3d;
-            /* Додаємо легку тінь тексту та іконці, щоб підкреслити відрив від фону */
             filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5));
         }
         
-        /* Додатковий шар для ще більшої глибини іконки */
         .icon-layer-3d {
             transform: translateZ(30px);
         }
@@ -111,9 +113,40 @@
         .delay-100 { transition-delay: 100ms; }
         .delay-200 { transition-delay: 200ms; }
         .delay-300 { transition-delay: 300ms; }
+
+        /* Cursor Glow Effect */
+        #cursor-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Typewriter Cursor */
+        .typewriter-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background-color: #a855f7;
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
     </style>
 </head>
-<body class="antialiased selection:bg-purple-500 selection:text-white">
+<body class="antialiased selection:bg-purple-500 selection:text-white relative">
+
+    <!-- Cursor Glow Element -->
+    <div id="cursor-glow"></div>
 
     <!-- Scroll Progress Bar -->
     <div id="progress-bar" class="fixed top-0 left-0 h-1.5 bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-500 origin-left z-[60] w-0"></div>
@@ -158,26 +191,27 @@
 
     <!-- Hero Section -->
     <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden bg-black text-white perspective-1000">
-        <!-- Abstract Background Shapes -->
-        <div class="absolute top-20 left-10 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-[80px] opacity-30 animate-blob"></div>
-        <div class="absolute bottom-20 right-10 w-96 h-96 bg-indigo-600 rounded-full mix-blend-multiply filter blur-[80px] opacity-30 animate-blob-reverse"></div>
+        <!-- Abstract Background Shapes (Added IDs for JS Parallax) -->
+        <div id="blob-1" class="absolute top-20 left-10 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-[80px] opacity-30 animate-blob transition-transform duration-100 ease-out"></div>
+        <div id="blob-2" class="absolute bottom-20 right-10 w-96 h-96 bg-indigo-600 rounded-full mix-blend-multiply filter blur-[80px] opacity-30 animate-blob-reverse transition-transform duration-100 ease-out"></div>
         
         <div class="container mx-auto px-6 z-10 text-center reveal active">
-            <h2 class="text-sm md:text-base text-purple-400 font-bold uppercase mb-8 tracking-[0.3em] transition-all duration-1000 ease-out">
-                Visual Identity & Web Design
+            <!-- Typewriter Container -->
+            <h2 class="text-sm md:text-base text-purple-400 font-bold uppercase mb-8 tracking-[0.3em] min-h-[1.5em]">
+                <span id="typewriter-text"></span><span class="typewriter-cursor"></span>
             </h2>
             
             <div class="flex justify-center">
                 <!-- Levitating Logo Container -->
                 <div class="relative group p-4 animate-float">
                     <div class="absolute inset-0 bg-gradient-to-r from-purple-600/30 to-pink-600/30 rounded-full blur-2xl animate-pulse"></div>
-                    <!-- Logo Path: IMG/logo.svg -->
+                    <!-- Local Logo Path -->
                     <img 
-                       src="IMG/logo.svg" 
+                       src="logo.svg" 
                        id="main-logo"
                        alt="HUMAN0880 Logo" 
                        class="relative h-24 md:h-40 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]" 
-                       onerror="this.onerror=null; this.src='https://placehold.co/600x150/000000/FFFFFF/png?text=logo.svg+Not+Found'; alert('Файл IMG/logo.svg не знайдено. Переконайтеся, що папка IMG існує поруч з index.html');"
+                       onerror="this.onerror=null; this.src='https://placehold.co/600x150/000000/FFFFFF/png?text=logo.svg+Not+Found'; alert('Файл logo.svg не знайдено. Переконайтеся, що файл лежить поруч з index.html');"
                     />
                 </div>
             </div>
@@ -374,7 +408,6 @@
             wrapper.style.transitionDelay = `${index * 50}ms`;
 
             // Card handles the tilt
-            // Note: removed 'scale3d' from js to avoid conflict, shadows added via CSS
             const card = document.createElement('div');
             card.className = "bg-zinc-900/50 backdrop-blur-sm p-8 rounded-2xl border border-zinc-800 hover:border-purple-500/50 transition-colors duration-300 group h-full card-3d relative cursor-pointer";
             
@@ -502,6 +535,45 @@
         }, observerOptions);
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // CURSOR GLOW EFFECT Logic
+        const cursorGlow = document.getElementById('cursor-glow');
+        const blob1 = document.getElementById('blob-1');
+        const blob2 = document.getElementById('blob-2');
+
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+            
+            // Move the glow
+            cursorGlow.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+
+            // Parallax Blobs
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const moveX = (x - centerX) / 30; // Dividing to slow down the movement
+            const moveY = (y - centerY) / 30;
+
+            if(blob1) blob1.style.transform = `translate(${moveX * -1}px, ${moveY * -1}px)`;
+            if(blob2) blob2.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+
+        // TYPEWRITER EFFECT Logic
+        const textToType = "Visual Identity & Web Design";
+        const typeWriterElement = document.getElementById('typewriter-text');
+        let charIndex = 0;
+
+        function type() {
+            if (charIndex < textToType.length) {
+                typeWriterElement.textContent += textToType.charAt(charIndex);
+                charIndex++;
+                setTimeout(type, 100); // Speed of typing
+            }
+        }
+        
+        // Start typing after a short delay
+        setTimeout(type, 1000);
+
     </script>
 </body>
 </html>
