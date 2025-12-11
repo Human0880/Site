@@ -245,6 +245,20 @@
             box-shadow: 0 4px 10px rgba(168, 85, 247, 0.2);
             transition: all 0.2s ease-out;
         }
+        
+        /* Logo Reflection Effect */
+        .logo-reflection::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(168, 85, 247, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+            pointer-events: none;
+            z-index: -1;
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-purple-500 selection:text-white relative">
@@ -312,7 +326,8 @@
             
             <div class="flex justify-center">
                 <!-- Levitating Logo Container -->
-                <div class="relative group p-4 animate-float">
+                <!-- Added logo-reflection class -->
+                <div class="relative group p-4 animate-float logo-reflection">
                     <div class="absolute inset-0 bg-gradient-to-r from-purple-600/30 to-pink-600/30 rounded-full blur-2xl animate-pulse"></div>
                     <!-- Local Logo Path -->
                     <img 
@@ -383,7 +398,8 @@
 
             <!-- Testimonial Carousel Container -->
             <div class="overflow-hidden relative">
-                <div id="testimonial-carousel" class="flex transition-transform duration-700 ease-in-out" style="width: fit-content;">
+                <!-- Added padding-bottom to prevent jump during resize -->
+                <div id="testimonial-carousel" class="flex transition-transform duration-700 ease-in-out pb-2" style="width: fit-content;">
                     <!-- Testimonial Cards injected by JS -->
                 </div>
             </div>
@@ -728,13 +744,19 @@
              const carousel = document.getElementById('testimonial-carousel');
              const containerWidth = carousel.parentElement.clientWidth;
              // Calculate width for 1 or 2 cards depending on screen size
-             if (window.innerWidth >= 1024) { // Large screen (lg breakpoint)
-                slideWidth = containerWidth / 2;
-                carousel.style.width = `${totalSlides * slideWidth + (totalSlides * 24)}px`; // width * slides + margin
-             } else { // Mobile/Tablet
-                slideWidth = containerWidth;
-                carousel.style.width = `${totalSlides * slideWidth + (totalSlides * 24)}px`; // width * slides + margin
-             }
+             // Use 1 card view if screen is small, 2 if screen is large
+             const cardsPerView = window.innerWidth >= 1024 ? 2 : 1; 
+             
+             // The width of a single card plus its margin (24px for ml-6)
+             slideWidth = (containerWidth / cardsPerView) - (cardsPerView > 1 ? 12 : 0); 
+             
+             // Calculate total width of the inner flex container
+             carousel.style.width = `${totalSlides * (slideWidth + 24)}px`;
+             
+             // Update width of each card element
+             document.querySelectorAll('.testimonial-card').forEach(card => {
+                card.style.width = `${slideWidth}px`;
+             });
         }
         
         function updateCarouselPosition() {
@@ -745,13 +767,15 @@
 
         function moveCarousel(direction) {
             const cardsPerView = window.innerWidth >= 1024 ? 2 : 1;
+            const maxScrollableSlides = totalSlides - cardsPerView;
+            
             let newSlide = currentSlide + direction;
 
             // Handle cycling/boundaries
-            if (newSlide >= totalSlides - cardsPerView + 1) {
+            if (newSlide > maxScrollableSlides) {
                 newSlide = 0; // Wrap to start
             } else if (newSlide < 0) {
-                newSlide = totalSlides - cardsPerView; // Wrap to end
+                newSlide = maxScrollableSlides; // Wrap to end
             }
 
             currentSlide = newSlide;
