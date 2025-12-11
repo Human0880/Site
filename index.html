@@ -427,12 +427,12 @@
                     linkText: "Переглянути все портфоліо",
                     mobileLinkText: "Переглянути все",
                     items: [
-                        { id: 1, title: "Веб-Дизайн", subtitle: "Сучасні та зручні інтерфейси", imgCount: 3 },
-                        { id: 2, title: "Логотипи", subtitle: "Унікальний знак бренду", imgCount: 3 },
-                        { id: 3, title: "Соціальні мережі", subtitle: "Оформлення та контент", imgCount: 3 },
-                        { id: 4, title: "Баннери", subtitle: "Рекламна графіка", imgCount: 3 },
-                        { id: 5, title: "Фірмовий стиль", subtitle: "Єдиний візуальний образ", imgCount: 3 },
-                        { id: 6, title: "Упаковка", subtitle: "Дизайн, що виділяє на полиці", imgCount: 2 }
+                        { id: 1, title: "Веб-Дизайн", subtitle: "Сучасні та зручні інтерфейси", filePrefix: "Web Design", imgCount: 3 },
+                        { id: 2, title: "Логотипи", subtitle: "Унікальний знак бренду", filePrefix: "Logos", imgCount: 3 },
+                        { id: 3, title: "Соціальні мережі", subtitle: "Оформлення та контент", filePrefix: "Social Media", imgCount: 6 },
+                        { id: 4, title: "Баннери", subtitle: "Рекламна графіка", filePrefix: "Banners", imgCount: 3 },
+                        { id: 5, title: "Фірмовий стиль", subtitle: "Єдиний візуальний образ", filePrefix: "Brand Identity", imgCount: 3 },
+                        { id: 6, title: "Упаковка", subtitle: "Дизайн, що виділяє на полиці", filePrefix: "Packaging", imgCount: 2 }
                     ]
                 },
                 contact: {
@@ -472,12 +472,12 @@
                     linkText: "View All Portfolio",
                     mobileLinkText: "View All",
                     items: [
-                        { id: 1, title: "Web Design", subtitle: "Modern & user-friendly interfaces", imgCount: 3 },
-                        { id: 2, title: "Logos", subtitle: "Unique brand marks", imgCount: 3 },
-                        { id: 3, title: "Social Media", subtitle: "Design & content", imgCount: 3 },
-                        { id: 4, title: "Banners", subtitle: "Advertising graphics", imgCount: 3 },
-                        { id: 5, title: "Brand Identity", subtitle: "Unified visual style", imgCount: 3 },
-                        { id: 6, title: "Packaging", subtitle: "Design that stands out", imgCount: 2 }
+                        { id: 1, title: "Web Design", subtitle: "Modern & user-friendly interfaces", filePrefix: "Web Design", imgCount: 3 },
+                        { id: 2, title: "Logos", subtitle: "Unique brand marks", filePrefix: "Logos", imgCount: 3 },
+                        { id: 3, title: "Social Media", subtitle: "Design & content", filePrefix: "Social Media", imgCount: 6 },
+                        { id: 4, title: "Banners", subtitle: "Advertising graphics", filePrefix: "Banners", imgCount: 3 },
+                        { id: 5, title: "Brand Identity", subtitle: "Unified visual style", filePrefix: "Brand Identity", imgCount: 3 },
+                        { id: 6, title: "Packaging", subtitle: "Design that stands out", filePrefix: "Packaging", imgCount: 2 }
                     ]
                 },
                 contact: {
@@ -586,20 +586,21 @@
             const t = translations[currentLang];
 
             t.portfolio.items.forEach((item, index) => {
+                let currentIndex = 1;
                 const container = document.createElement('div');
                 // Creating a relative container for the 3D stack
-                container.className = "relative group perspective-1000 w-full aspect-[4/3] reveal";
+                container.className = "relative group perspective-1000 w-full aspect-[4/3] reveal cursor-pointer";
                 container.style.transitionDelay = `${index * 100}ms`;
 
                 // Main Image (Top)
-                const mainImgPath = `IMG/IMG ${item.id}.jpg`;
+                const mainImgPath = `IMG/${item.filePrefix} 1.jpg`;
                 
                 // Helper to generate stacking cards
                 let stackHTML = '';
                 
                 // Card 2 (Left/Back) - only if count >= 2
                 if (item.imgCount >= 2) {
-                    const imgPath2 = `IMG/IMG ${item.id}-2.jpg`; 
+                    const imgPath2 = `IMG/${item.filePrefix} 2.jpg`; 
                     stackHTML += `
                         <div class="stack-card stack-card-2 absolute inset-0 w-full h-full rounded-xl overflow-hidden bg-zinc-800 shadow-xl opacity-0 transform scale-95 transition-all duration-500 z-10">
                             <img src="${imgPath2}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100" onerror="this.style.display='none'">
@@ -609,7 +610,7 @@
 
                 // Card 3 (Right/Back) - only if count >= 3
                 if (item.imgCount >= 3) {
-                    const imgPath3 = `IMG/IMG ${item.id}-3.jpg`;
+                    const imgPath3 = `IMG/${item.filePrefix} 3.jpg`;
                     stackHTML += `
                         <div class="stack-card stack-card-3 absolute inset-0 w-full h-full rounded-xl overflow-hidden bg-zinc-800 shadow-xl opacity-0 transform scale-95 transition-all duration-500 z-0">
                             <img src="${imgPath3}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100" onerror="this.style.display='none'">
@@ -621,9 +622,10 @@
                 stackHTML += `
                     <div class="stack-card stack-card-1 absolute inset-0 w-full h-full rounded-xl overflow-hidden bg-zinc-800 border border-zinc-800 group-hover:border-zinc-600 transition-all duration-500 z-30 shadow-2xl">
                         <img 
+                            id="img-${index}"
                             src="${mainImgPath}" 
                             alt="${item.title}" 
-                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            class="w-full h-full object-cover transition-opacity duration-300"
                             onerror="this.parentElement.innerHTML='<div class=\\'flex items-center justify-center h-full text-zinc-600\\'>Image not found</div>'"
                         >
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8 backdrop-blur-[2px]">
@@ -634,6 +636,25 @@
                 `;
 
                 container.innerHTML = stackHTML;
+                
+                // Add Click Event to Cycle Images
+                container.addEventListener('click', () => {
+                    const img = container.querySelector(`#img-${index}`);
+                    if (!img) return;
+                    
+                    // Increment index
+                    currentIndex = (currentIndex % item.imgCount) + 1;
+                    
+                    // Fade out
+                    img.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        img.src = `IMG/${item.filePrefix} ${currentIndex}.jpg`;
+                        // Fade in on load
+                        img.onload = () => { img.style.opacity = '1'; };
+                    }, 200);
+                });
+
                 portfolioGrid.appendChild(container);
             });
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
