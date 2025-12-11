@@ -204,6 +204,24 @@
             /* Збільшив тривалість для плавності */
             transition: opacity 0.5s ease-in-out, transform 0.7s; 
         }
+        
+        /* Клікнути, щоб змінити UX hint */
+        .click-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(168, 85, 247, 0.9);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 9999px;
+            font-size: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .group:hover .click-indicator {
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-purple-500 selection:text-white relative">
@@ -329,6 +347,37 @@
             </div>
         </div>
     </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-24 bg-zinc-900 text-white relative">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <h2 id="testimonials-title" class="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">Відгуки Клієнтів</h2>
+                <p id="testimonials-desc" class="mt-6 text-gray-400 text-lg max-w-2xl mx-auto">
+                    Ми пишаємося результатами нашої роботи та відгуками, які отримуємо.
+                </p>
+            </div>
+
+            <!-- Testimonial Carousel Container -->
+            <div class="overflow-hidden relative">
+                <div id="testimonial-carousel" class="flex transition-transform duration-700 ease-in-out" style="width: fit-content;">
+                    <!-- Testimonial Cards injected by JS -->
+                </div>
+            </div>
+
+            <div class="flex justify-center mt-8 space-x-3">
+                <button onclick="moveCarousel(-1)" class="w-10 h-10 rounded-full bg-zinc-800 text-purple-400 hover:bg-purple-500 hover:text-white transition-colors flex items-center justify-center">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <button onclick="moveCarousel(1)" class="w-10 h-10 rounded-full bg-zinc-800 text-purple-400 hover:bg-purple-500 hover:text-white transition-colors flex items-center justify-center">
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+        </div>
+    </section>
+    <!-- End Testimonials Section -->
+
 
     <!-- Contact Section -->
     <section id="contact" class="py-24 bg-zinc-950 text-white relative overflow-hidden">
@@ -476,7 +525,16 @@
                     btnInstagram: "Написати в Instagram",
                     telegramMsgPrefix: "Вітаю! Мене цікавить послуга: "
                 },
-                footer: { rights: "Всі права захищено." }
+                footer: { rights: "Всі права захищено." },
+                testimonials: {
+                    title: "Відгуки Клієнтів",
+                    desc: "Ми пишаємося результатами нашої роботи та відгуками, які отримуємо.",
+                    items: [
+                        { text: "Робота була виконана швидко, якісно та відповідно до всіх моїх вимог. Дизайн логотипу перевершив очікування!", author: "Олександр К.", position: "CEO, TechNova" },
+                        { text: "Неймовірна увага до деталей у веб-дизайні. Сайт отримав дуже позитивні відгуки від користувачів.", author: "Марія П.", position: "Marketing Director" },
+                        { text: "Найкращий досвід співпраці. Баннери для соцмереж привели вдвічі більше клієнтів, ніж очікувалося.", author: "Ігор В.", position: "Small Business Owner" }
+                    ]
+                }
             },
             en: {
                 nav: { services: "Services", portfolio: "Portfolio", contact: "Contact" },
@@ -522,7 +580,16 @@
                     btnInstagram: "Write on Instagram",
                     telegramMsgPrefix: "Hello! I am interested in: "
                 },
-                footer: { rights: "All rights reserved." }
+                footer: { rights: "All rights reserved." },
+                testimonials: {
+                    title: "Client Testimonials",
+                    desc: "We take pride in our work results and the feedback we receive.",
+                    items: [
+                        { text: "The work was done quickly, efficiently, and according to all my requirements. The logo design exceeded expectations!", author: "Oleksandr K.", position: "CEO, TechNova" },
+                        { text: "Incredible attention to detail in web design. The site received very positive feedback from users.", author: "Maria P.", position: "Marketing Director" },
+                        { text: "Best cooperation experience. Social media banners brought twice as many clients as expected.", author: "Ihor V.", position: "Small Business Owner" }
+                    ]
+                }
             }
         };
 
@@ -541,6 +608,12 @@
             });
         }, observerOptions);
 
+        // --- CAROUSEL STATE ---
+        let currentSlide = 0;
+        let slideWidth = 0;
+        const totalSlides = translations.ua.testimonials.items.length;
+
+
         // --- RENDER FUNCTIONS ---
 
         function updateStaticText() {
@@ -557,7 +630,6 @@
 
             // Hero
             // Typewriter is handled separately to restart animation
-            // Hero Desc is technically hidden in previous version but accessible via code if needed
             const heroDesc = document.getElementById('hero-desc');
             if(heroDesc) heroDesc.textContent = t.hero.desc;
 
@@ -567,9 +639,10 @@
 
             // Portfolio
             document.getElementById('portfolio-title').textContent = t.portfolio.title;
-            // REMOVED: portfolio link text updates
-            // document.getElementById('portfolio-link-text').textContent = t.portfolio.linkText;
-            // document.getElementById('portfolio-mobile-link').textContent = t.portfolio.mobileLinkText;
+
+            // Testimonials
+            document.getElementById('testimonials-title').textContent = t.testimonials.title;
+            document.getElementById('testimonials-desc').textContent = t.testimonials.desc;
 
             // Contact
             document.getElementById('contact-title').innerHTML = t.contact.title;
@@ -581,6 +654,71 @@
             // Footer
             document.getElementById('footer-rights').textContent = t.footer.rights;
         }
+
+        function renderTestimonials() {
+            const carousel = document.getElementById('testimonial-carousel');
+            carousel.innerHTML = '';
+            const t = translations[currentLang];
+
+            t.testimonials.items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "testimonial-card p-8 md:p-12 bg-zinc-800/70 border border-zinc-700 rounded-xl flex-shrink-0 w-full lg:w-[calc(50%-1.5rem)] ml-6 first:ml-0"; // Dynamic sizing
+                card.innerHTML = `
+                    <p class="text-3xl font-serif text-purple-400 mb-6">“</p>
+                    <p class="text-xl italic text-gray-300 mb-8 leading-relaxed">${item.text}</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-lg font-bold">${item.author.charAt(0)}</div>
+                        <div class="ml-4">
+                            <p class="font-bold text-white">${item.author}</p>
+                            <p class="text-sm text-gray-400">${item.position}</p>
+                        </div>
+                    </div>
+                `;
+                carousel.appendChild(card);
+            });
+            
+            // Set initial slide position and width based on current viewport
+            updateCarouselDimensions();
+            currentSlide = 0;
+            updateCarouselPosition();
+        }
+        
+        function updateCarouselDimensions() {
+             const carousel = document.getElementById('testimonial-carousel');
+             const containerWidth = carousel.parentElement.clientWidth;
+             // Calculate width for 1 or 2 cards depending on screen size
+             if (window.innerWidth >= 1024) { // Large screen (lg breakpoint)
+                slideWidth = containerWidth / 2;
+                carousel.style.width = `${totalSlides * slideWidth + (totalSlides * 24)}px`; // width * slides + margin
+             } else { // Mobile/Tablet
+                slideWidth = containerWidth;
+                carousel.style.width = `${totalSlides * slideWidth + (totalSlides * 24)}px`; // width * slides + margin
+             }
+        }
+        
+        function updateCarouselPosition() {
+            const carousel = document.getElementById('testimonial-carousel');
+            const offset = currentSlide * (slideWidth + 24); // 24px is the gap (ml-6)
+            carousel.style.transform = `translateX(-${offset}px)`;
+        }
+
+        function moveCarousel(direction) {
+            const cardsPerView = window.innerWidth >= 1024 ? 2 : 1;
+            let newSlide = currentSlide + direction;
+
+            // Handle cycling/boundaries
+            if (newSlide >= totalSlides - cardsPerView + 1) {
+                newSlide = 0; // Wrap to start
+            } else if (newSlide < 0) {
+                newSlide = totalSlides - cardsPerView; // Wrap to end
+            }
+
+            currentSlide = newSlide;
+            updateCarouselPosition();
+        }
+        // Expose moveCarousel globally for button clicks
+        window.moveCarousel = moveCarousel;
+
 
         function renderServices() {
             const servicesGrid = document.getElementById('services-grid');
@@ -682,6 +820,8 @@
                                 <span class="text-purple-300 text-sm font-bold uppercase tracking-wider mt-1 block">${item.subtitle}</span>
                             </div>
                         </div>
+                         <!-- CLICK HINT -->
+                        <div class="click-indicator">Клікнути, щоб змінити</div>
                     </div>
                 `;
 
@@ -813,6 +953,7 @@
             renderServices();
             renderPortfolio();
             renderContactChips();
+            renderTestimonials(); // Update testimonials on language change
             startTypewriter();
         }
 
@@ -827,6 +968,7 @@
         renderServices();
         renderPortfolio();
         renderContactChips();
+        renderTestimonials(); // Initial render for testimonials
         startTypewriter();
 
         // Initialize Lucide Icons
@@ -895,6 +1037,12 @@
             const moveY = (y - centerY) / 30;
             if(blob1) blob1.style.transform = `translate(${moveX * -1}px, ${moveY * -1}px)`;
             if(blob2) blob2.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+
+        // Responsive Carousel Fix
+        window.addEventListener('resize', () => {
+            updateCarouselDimensions();
+            updateCarouselPosition();
         });
 
     </script>
