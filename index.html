@@ -322,7 +322,7 @@
             
             <div class="flex justify-center mb-6">
                 <!-- NEW: Magnetic Pulse Logo Container -->
-                <div id="hero-logo-container" class="relative w-40 h-40 md:w-56 md:h-56 flex items-center justify-center cursor-pointer group">
+                <div id="hero-logo-container" class="relative w-40 h-40 md:w-64 md:h-64 flex items-center justify-center cursor-pointer group">
                     <!-- Pulse Rings -->
                     <div class="absolute inset-0 rounded-full border border-purple-500/30 scale-75 animate-ping-slow"></div>
                     <div class="absolute inset-0 rounded-full border border-pink-500/20 scale-90 animate-ping-slow" style="animation-delay: 1s;"></div>
@@ -331,11 +331,12 @@
                     <div class="absolute inset-0 bg-gradient-to-tr from-purple-600/40 to-pink-600/40 rounded-full blur-[40px] opacity-60 group-hover:opacity-100 transition-opacity duration-500"></div>
     
                     <!-- Logo Image -->
+                    <!-- Reverted size to h-24 md:h-40 as requested -->
                     <img 
                        src="IMG/logo.svg" 
                        id="main-logo-img"
                        alt="HUMAN0880 Logo" 
-                       class="relative w-24 md:w-32 object-contain drop-shadow-[0_0_25px_rgba(168,85,247,0.6)] z-10 transition-transform duration-100 will-change-transform" 
+                       class="relative h-24 md:h-40 object-contain drop-shadow-[0_0_25px_rgba(168,85,247,0.6)] z-10 transition-transform duration-100 will-change-transform" 
                        onerror="this.onerror=null; this.src='https://placehold.co/600x150/000000/FFFFFF/png?text=logo.svg+Not+Found'; alert('Файл IMG/logo.svg не знайдено.');"
                     />
                 </div>
