@@ -27,7 +27,6 @@
                         'blob-reverse': 'blob-reverse 18s infinite',
                         'cursor': 'cursor .75s step-end infinite',
                         'icon-jump': 'icon-jump 0.5s ease-in-out',
-                        'marquee': 'marquee var(--marquee-duration) linear infinite', /* Змінна для швидкості */
                     },
                     keyframes: {
                         float: {
@@ -54,11 +53,6 @@
                             '0%': { transform: 'translateY(0) scale(1)' },
                             '50%': { transform: 'translateY(-5px) scale(1.1)' },
                             '100%': { transform: 'translateY(0) scale(1)' },
-                        },
-                        /* Keyframe for Marquee Effect */
-                        marquee: {
-                            '0%': { transform: 'translateX(0%)' },
-                            '100%': { transform: 'translateX(-50%)' }, /* Рухає на половину ширини (для циклу) */
                         }
                     }
                 }
@@ -252,12 +246,23 @@
             transition: all 0.2s ease-out;
         }
         
-        /* Marquee Effect Container */
-        .marquee-track {
-            animation: marquee var(--marquee-duration) linear infinite; /* Змінна швидкості */
-            display: flex;
-            white-space: nowrap; 
+        /* ================= MARQUEE ANIMATION (FIXED) ================= */
+        
+        /* 1. Define Keyframes explicitly in CSS */
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* Moves left by 50% (one copy) */
         }
+
+        /* 2. Container Style */
+        .marquee-track {
+            display: flex;
+            white-space: nowrap;
+            /* Using fallback duration (20s) if JS fails, otherwise variable */
+            animation: marquee var(--marquee-duration, 20s) linear infinite;
+        }
+        
+        /* 3. Pause on Hover */
         .marquee-track:hover {
             animation-play-state: paused;
         }
@@ -348,7 +353,7 @@
                        id="main-logo"
                        alt="HUMAN0880 Logo" 
                        class="relative h-24 md:h-40 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]" 
-                       onerror="this.onerror=null; this.src='https://placehold.co/600x150/000000/FFFFFF/png?text=HUMAN0880+LOGO'; /* Alert removed for smoother preview */"
+                       onerror="this.onerror=null; this.src='https://placehold.co/600x150/000000/FFFFFF/png?text=logo.svg+Not+Found'; alert('Файл IMG/logo.svg не знайдено. Переконайтеся, що папка IMG існує поруч з index.html');"
                     />
                 </div>
             </div>
@@ -359,11 +364,11 @@
         </div>
     </section>
     
-    <!-- Stats Marquee Section (NEW) -->
+    <!-- Stats Marquee Section (Robust CSS Version) -->
     <section id="stats-marquee" class="bg-zinc-950 text-white py-4 border-t border-b border-zinc-800">
         <div class="overflow-hidden">
             <!-- stats-track needs to be wide enough to hold two copies of the content -->
-            <div id="stats-track" class="marquee-track hover:animation-pause">
+            <div id="stats-track" class="marquee-track">
                 <!-- Content duplicated by JS for seamless loop -->
             </div>
         </div>
@@ -452,7 +457,7 @@
                             </div>
                             <div>
                                 <p class="text-sm text-gray-500 uppercase tracking-wider">Telegram</p>
-                                <a href="https://t.me/Human0880" target="_blank" class="text-lg font-medium hover:text-purple-400 transition-colors">@human0880</a>
+                                <a href="https://t.me/Human0880" target="_blank" class="text-lg font-medium hover:text-purple-400 transition-colors">@Human0880</a>
                             </div>
                         </div>
                     </div>
@@ -549,10 +554,6 @@
                         { id: 2, title: "Логотипи", subtitle: "Унікальний знак бренду", filePrefix: "Logos", imgCount: 3 },
                         { id: 3, title: "Соціальні мережі", subtitle: "Оформлення та контент", filePrefix: "Social Media", imgCount: 6 },
                         { id: 4, title: "Баннери", subtitle: "Рекламна графіка", filePrefix: "Banners", imgCount: 3 },
-                        
-                        // REMOVED: Фірмовий стиль (id: 5)
-                        // REMOVED: Упаковка (id: 6)
-                        // Re-indexing logic is not required here, as we only need 4 items
                     ]
                 },
                 contact: {
@@ -564,16 +565,7 @@
                     btnInstagram: "Написати в Instagram",
                     telegramMsgPrefix: "Вітаю! Мене цікавить послуга: "
                 },
-                footer: { rights: "Всі права захищено." },
-                testimonials: {
-                    title: "Відгуки Клієнтів",
-                    desc: "Ми пишаємося результатами нашої роботи та відгуками, які отримуємо.",
-                    items: [
-                        { text: "Надзвичайно задоволений співпрацею з HUMAN0880. Новий логотип для Alpha Blinds виглядає сучасно, дорого та відображає нашу місію. Дякую!", author: "Альфа Б.", position: "CEO, Alpha Blinds" },
-                        { text: "Як розробник, я можу оцінити не тільки красу, а й логіку. Дизайн сайту RobertAI був чистим, структурованим, а UX — інтуїтивно зрозумілим. Чудова робота!", author: "Роберт А.", position: "Lead Developer, RobertAI" },
-                        { text: "Баннери для нашої рекламної кампанії 'Пивандр' були настільки креативними та сміливими, що ми отримали рекордну кількість кліків та продажів. Справжні профі!", author: "Олег З.", position: "Marketing Manager, Пивандр" }
-                    ]
-                }
+                footer: { rights: "Всі права захищено." }
             },
             en: {
                 nav: { services: "Services", portfolio: "Portfolio", contact: "Contact" },
@@ -612,9 +604,6 @@
                         { id: 2, title: "Logos", subtitle: "Unique brand marks", filePrefix: "Logos", imgCount: 3 },
                         { id: 3, title: "Social Media", subtitle: "Design & content", filePrefix: "Social Media", imgCount: 6 },
                         { id: 4, title: "Banners", subtitle: "Advertising graphics", filePrefix: "Banners", imgCount: 3 },
-                        
-                        // REMOVED: Brand Identity (id: 5)
-                        // REMOVED: Packaging (id: 6)
                     ]
                 },
                 contact: {
@@ -626,16 +615,7 @@
                     btnInstagram: "Write on Instagram",
                     telegramMsgPrefix: "Hello! I am interested in: "
                 },
-                footer: { rights: "All rights reserved." },
-                testimonials: {
-                    title: "Client Testimonials",
-                    desc: "We take pride in our work results and the feedback we receive.",
-                    items: [
-                        { text: "Extremely satisfied with the cooperation with HUMAN0880. The new logo for Alpha Blinds looks modern, premium, and reflects our mission. Thank you!", author: "Alpha B.", position: "CEO, Alpha Blinds" },
-                        { text: "As a developer, I can appreciate not only beauty but also logic. The RobertAI website design was clean, structured, and the UX was intuitive. Great job!", author: "Robert A.", position: "Lead Developer, RobertAI" },
-                        { text: "The banners for our 'Pyvandr' advertising campaign were so creative and bold that we received a record number of clicks and sales. True pros!", author: "Oleg Z.", position: "Marketing Manager, Pyvandr" }
-                    ]
-                }
+                footer: { rights: "All rights reserved." }
             }
         };
 
@@ -654,29 +634,19 @@
             });
         }, observerOptions);
 
-        // --- CAROUSEL HELPER FUNCTIONS (Moved UP) ---
+        // --- STATS MARQUEE FUNCTION ---
         function updateCarouselDimensions() {
              const track = document.getElementById('stats-track');
              if (!track || track.children.length === 0) return;
 
-             // 1. Measure the width of one copy of the duplicated content
-             // We use scrollWidth / 2 is the most robust way when content is duplicated.
-             
-             // Temporarily set width to fit-content to force actual width calculation
              track.style.width = 'fit-content';
-             
-             // The full rendered width (containing two copies of content)
              const fullContentWidth = track.scrollWidth;
-             
-             // One cycle is half the rendered width
              const measuredWidth = fullContentWidth / 2;
-
-             // 2. Set the track width to double the cycle width for seamless looping
              track.style.width = `${measuredWidth * 2}px`;
 
-             // 3. Set animation speed
-             const speed = measuredWidth / 40; // 40px/sec is a constant speed
-             document.documentElement.style.setProperty('--marquee-duration', `${speed}s`);
+             const targetSpeedPxPerSec = 40; 
+             const speedDuration = measuredWidth / targetSpeedPxPerSec; 
+             document.documentElement.style.setProperty('--marquee-duration', `${speedDuration}s`);
         }
         
         function renderStatsMarquee() {
@@ -697,10 +667,8 @@
             };
 
             renderContent(stats);
-            renderContent(stats); // Duplicate for seamless loop
+            renderContent(stats);
             
-            // Wait for elements to be rendered, then calculate dimensions
-            // Use requestAnimationFrame for reliable DOM measurement after painting
             requestAnimationFrame(() => {
                  updateCarouselDimensions();
             });
@@ -780,52 +748,47 @@
             portfolioGrid.innerHTML = '';
             const t = translations[currentLang];
 
-            // Filter to include only the first 4 items (Web Design, Logos, Social Media, Banners)
+            // Filter to include only the first 4 items
             const filteredItems = t.portfolio.items.slice(0, 4); 
 
             filteredItems.forEach((item, index) => {
                 let currentIndex = 1;
                 const container = document.createElement('div');
-                // Creating a relative container for the 3D stack
                 container.className = "relative group perspective-1000 w-full aspect-[4/3] reveal cursor-pointer";
                 container.style.transitionDelay = `${index * 100}ms`;
 
-                // Main Image (Top)
                 const mainImgPath = `IMG/${item.filePrefix} 1.jpg`;
-                
-                // Helper to generate stacking cards
                 let stackHTML = '';
                 
-                // Card 2 (Left/Back) - only if count >= 2
+                // Card 2
                 if (item.imgCount >= 2) {
                     const imgPath2 = `IMG/${item.filePrefix} 2.jpg`; 
                     stackHTML += `
                         <div class="stack-card stack-card-2 absolute inset-0 w-full h-full rounded-xl overflow-hidden shadow-xl opacity-0 transform scale-95 transition-all duration-500 z-10">
-                            <img src="${imgPath2}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/222/555?text=Img+2'">
+                            <img src="${imgPath2}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100" onerror="this.style.display='none'">
                         </div>
                     `;
                 }
 
-                // Card 3 (Right/Back) - only if count >= 3
+                // Card 3
                 if (item.imgCount >= 3) {
                     const imgPath3 = `IMG/${item.filePrefix} 3.jpg`;
                     stackHTML += `
                         <div class="stack-card stack-card-3 absolute inset-0 w-full h-full rounded-xl overflow-hidden shadow-xl opacity-0 transform scale-95 transition-all duration-500 z-0">
-                            <img src="${imgPath3}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100" onerror="this.src='https://placehold.co/600x400/222/555?text=Img+3'">
+                            <img src="${imgPath3}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100" onerror="this.style.display='none'">
                         </div>
                     `;
                 }
                 
-                // For Social Media (up to 6 images)
+                // Extra Images (hidden)
                 if (item.filePrefix === 'Social Media' && item.imgCount > 3) {
-                      for (let i = 4; i <= item.imgCount; i++) {
+                     for (let i = 4; i <= item.imgCount; i++) {
                         const extraImgPath = `IMG/${item.filePrefix} ${i}.jpg`;
-                         // We don't stack these, but we ensure the path exists for cycling
                         stackHTML += `<img data-src="${extraImgPath}" style="display:none;" data-index="${i}" onerror="this.style.display='none'">`;
                     }
                 }
 
-                // Main Card (Front)
+                // Main Card
                 stackHTML += `
                     <div class="stack-card stack-card-1 absolute inset-0 w-full h-full rounded-xl overflow-hidden border border-zinc-800 group-hover:border-zinc-600 transition-all duration-500 z-30 shadow-2xl">
                         <img 
@@ -833,54 +796,41 @@
                             src="${mainImgPath}" 
                             alt="${item.title}" 
                             class="w-full h-full object-cover project-image"
-                            onerror="this.src='https://placehold.co/600x400/18181b/a855f7?text=${item.title.replace(' ','+')}'"
+                            onerror="this.parentElement.innerHTML='<div class=\\'flex items-center justify-center h-full text-zinc-600\\'>Image not found</div>'"
                         >
                         
-                        <!-- INVERTED HOVER OVERLAY (Visible by default) -->
                         <div class="inverted-overlay absolute inset-0 flex items-end justify-start p-8">
                             <div class="inverted-content">
                                 <h3 class="text-2xl font-bold text-white">${item.title}</h3>
                                 <span class="text-purple-400 text-sm font-bold uppercase tracking-wider mt-1 block">${item.subtitle}</span>
                             </div>
                         </div>
-                         <!-- CLICK HINT -->
                         <div class="click-indicator">Клікнути, щоб змінити</div>
                     </div>
                 `;
 
                 container.innerHTML = stackHTML;
                 
-                // Add Click Event to Cycle Images
                 container.addEventListener('click', (e) => {
-                    // Prevent cycling if stacking effect is active (just entered hover state)
                     if (e.target.closest('.stack-card-2') || e.target.closest('.stack-card-3')) return;
                     
                     const img = container.querySelector(`#img-${index}`);
                     if (!img) return;
                     
-                    // Increment index
                     currentIndex = (currentIndex % item.imgCount) + 1;
                     
-                    // The core change: Create a temporary image to pre-load the next image
                     const nextImgPath = `IMG/${item.filePrefix} ${currentIndex}.jpg`;
                     
                     const tempImg = new Image();
                     tempImg.onload = () => {
-                        // Once pre-loaded, update main image source and fade in
                         img.src = nextImgPath;
                         img.style.opacity = '1';
                     };
                     tempImg.onerror = () => {
-                        // Handle error gracefully, or just stay on the last image
-                        // For this demo, we swap to a placeholder if local file is missing
-                        img.src = `https://placehold.co/600x400/18181b/a855f7?text=${item.title}+${currentIndex}`;
                         img.style.opacity = '1';
                     };
                     
-                    // Start fade out animation immediately
                     img.style.opacity = '0';
-                    
-                    // Start pre-loading the next image
                     tempImg.src = nextImgPath;
                 });
 
@@ -900,7 +850,6 @@
             t.contact.chips.forEach(srv => {
                 const btn = document.createElement('button');
                 btn.textContent = srv;
-                // FIXED: Syntax error, closing quotes on className
                 btn.className = "service-btn border border-zinc-700 bg-zinc-900/50 text-gray-400 px-4 py-3 rounded-lg text-sm font-medium hover:border-purple-500 hover:text-white transition-all duration-200 text-left";
                 
                 btn.addEventListener('click', () => {
@@ -975,7 +924,7 @@
             btn.innerHTML = currentLang === 'ua' ? '<span class="text-purple-400">UA</span> / EN' : 'UA / <span class="text-purple-400">EN</span>';
 
             updateStaticText();
-            renderStatsMarquee(); // Update stats marquee on language change
+            renderStatsMarquee(); // Update stats marquee
             renderServices();
             renderPortfolio();
             renderContactChips();
@@ -984,25 +933,19 @@
 
         // --- INITIALIZATION ---
         
-        // Language Switch Event
         document.getElementById('lang-switch').addEventListener('click', switchLanguage);
-
-        // Initial Render
         document.getElementById('lang-switch').innerHTML = '<span class="text-purple-400">UA</span> / EN';
+        
         updateStaticText();
-        renderStatsMarquee(); // Initial render for stats marquee
+        renderStatsMarquee();
         renderServices();
         renderPortfolio();
         renderContactChips();
         startTypewriter();
 
-        // Initialize Lucide Icons
         lucide.createIcons();
-
-        // Footer Year
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // Mobile Menu Logic
         const menuBtn = document.getElementById('menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         const mobileLinks = document.querySelectorAll('.mobile-link');
@@ -1029,7 +972,6 @@
             });
         });
 
-        // Scroll Logic
         const navbar = document.getElementById('navbar');
         const progressBar = document.getElementById('progress-bar');
 
@@ -1047,7 +989,6 @@
             progressBar.style.width = scrollPercentage + '%';
         });
 
-        // Cursor & Blob Logic
         const cursorGlow = document.getElementById('cursor-glow');
         const blob1 = document.getElementById('blob-1');
         const blob2 = document.getElementById('blob-2');
@@ -1064,7 +1005,6 @@
             if(blob2) blob2.style.transform = `translate(${moveX}px, ${moveY}px)`;
         });
 
-        // Responsive Marquee Fix
         window.addEventListener('resize', () => {
             renderStatsMarquee();
         });
