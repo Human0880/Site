@@ -237,7 +237,7 @@
             transition: all 0.2s ease-out;
         }
         
-        /* MARQUEE ANIMATION (CSS ONLY METHOD) */
+        /* MARQUEE ANIMATION */
         @keyframes scroll-marquee-frames {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
@@ -321,17 +321,17 @@
             </h2>
             
             <div class="flex justify-center mb-6">
-                <!-- NEW: Premium Floating Logo Container (No Mouse Interaction) -->
-                <div class="relative w-40 h-40 md:w-64 md:h-64 flex items-center justify-center">
+                <!-- Premium Floating Logo Container (Size Increased) -->
+                <div class="relative w-56 h-56 md:w-96 md:h-96 flex items-center justify-center">
                     <!-- Breathing Glow -->
-                    <div class="absolute inset-0 bg-gradient-to-tr from-purple-600/50 to-pink-600/50 rounded-full blur-[50px] animate-breathing-glow"></div>
+                    <div class="absolute inset-0 bg-gradient-to-tr from-purple-600/50 to-pink-600/50 rounded-full blur-[60px] animate-breathing-glow"></div>
     
-                    <!-- Logo Image with Slow Float -->
+                    <!-- Logo Image with Slow Float (Increased Size) -->
                     <img 
                        src="IMG/logo.svg" 
-                       id="main-logo"
+                       id="main-logo-img"
                        alt="HUMAN0880 Logo" 
-                       class="relative h-24 md:h-40 object-contain drop-shadow-[0_0_35px_rgba(168,85,247,0.7)] z-10 animate-float-slow" 
+                       class="relative h-32 md:h-60 object-contain drop-shadow-[0_0_40px_rgba(168,85,247,0.7)] z-10 animate-float-slow" 
                        onerror="this.onerror=null; this.src='https://placehold.co/600x150/000000/FFFFFF/png?text=logo.svg+Not+Found'; alert('Файл IMG/logo.svg не знайдено.');"
                     />
                 </div>
@@ -342,8 +342,8 @@
             </p>
         </div>
 
-        <!-- Scroll Down Indicator -->
-        <div class="absolute bottom-24 left-1/2 transform -translate-x-1/2 animate-bounce z-20 cursor-pointer" onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})">
+        <!-- Scroll Down Indicator (Centered horizontally) -->
+        <div class="absolute bottom-32 left-1/2 transform -translate-x-1/2 animate-bounce z-20 cursor-pointer" onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})">
             <i data-lucide="chevron-down" class="w-8 h-8 text-white/50 hover:text-white transition-colors"></i>
         </div>
 
