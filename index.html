@@ -146,13 +146,13 @@
                 <!-- Levitating Logo Container -->
                 <div class="relative group p-4 animate-float">
                     <div class="absolute inset-0 bg-gradient-to-r from-purple-600/30 to-pink-600/30 rounded-full blur-2xl animate-pulse"></div>
-                    <!-- Local Logo Path: Removed IMG/ prefix because index.html is inside IMG folder -->
+                    <!-- Logo Path: Pointing to IMG folder -->
                     <img 
-                       src="logo.svg" 
+                       src="IMG/logo.svg" 
                        id="main-logo"
                        alt="HUMAN0880 Logo" 
                        class="relative h-24 md:h-40 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]" 
-                       onerror="this.onerror=null; this.src='https://placehold.co/600x150/000000/FFFFFF/png?text=logo.svg+Not+Found'; alert('Файл logo.svg не знайдено поруч з index.html.');"
+                       onerror="this.onerror=null; this.src='https://placehold.co/600x150/000000/FFFFFF/png?text=IMG/logo.svg+Not+Found'; alert('Файл IMG/logo.svg не знайдено. Переконайтеся, що папка IMG існує поруч з index.html');"
                     />
                 </div>
             </div>
@@ -351,8 +351,8 @@
             div.style.transitionDelay = `${index * 100}ms`;
             
             // Generate Local path for image
-            // Removed IMG/ prefix because index.html is located INSIDE the IMG folder
-            const imgPath = `IMG ${item.id}.jpg`;
+            // Reverted to use IMG folder prefix: IMG/IMG 1.jpg
+            const imgPath = `IMG/IMG ${item.id}.jpg`;
 
             div.innerHTML = `
                 <img 
