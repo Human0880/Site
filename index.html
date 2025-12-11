@@ -28,7 +28,6 @@
                         'cursor': 'cursor .75s step-end infinite',
                         'icon-jump': 'icon-jump 0.5s ease-in-out',
                         'marquee': 'marquee var(--marquee-duration) linear infinite',
-                        /* Нові преміум анімації */
                         'float-slow': 'float 8s ease-in-out infinite',
                         'breathing-glow': 'breathing-glow 5s ease-in-out infinite alternate',
                     },
@@ -62,8 +61,7 @@
                             '0%': { transform: 'translateX(0%)' },
                             '100%': { transform: 'translateX(-50%)' }, 
                         },
-                        /* Анімація дихання для світіння */
-                        'breathing-glow': {
+                         'breathing-glow': {
                             '0%': { opacity: '0.4', transform: 'scale(0.9)' },
                             '100%': { opacity: '0.8', transform: 'scale(1.1)' },
                         }
@@ -115,11 +113,9 @@
         .card-3d {
             transform-style: preserve-3d;
             will-change: transform;
-            /* Ефект "вдавленості" для картки */
             box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.5);
         }
         
-        /* Service Icon Hover Effect */
         .service-icon-wrapper:hover .service-icon {
             animation: icon-jump 0.5s ease-in-out 1, rotate 0.6s;
         }
@@ -181,59 +177,44 @@
         .stack-card {
             transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        
         .group:hover .stack-card-1 {
-            transform: translateY(0) scale(1.03); /* Додаємо невеликий підйом */
-            box-shadow: 0 15px 30px rgba(168, 85, 247, 0.2); /* Додаємо тінь */
+            transform: translateY(0) scale(1.03); 
+            box-shadow: 0 15px 30px rgba(168, 85, 247, 0.2); 
             z-index: 30;
         }
-        
-        /* Left/Top Card */
         .group:hover .stack-card-2 {
             transform: translate(-10%, -5%) rotate(-5deg) scale(0.95);
             opacity: 1;
             z-index: 20;
         }
-        
-        /* Right/Bottom Card */
         .group:hover .stack-card-3 {
             transform: translate(10%, -10%) rotate(5deg) scale(0.9);
             opacity: 1;
             z-index: 10;
         }
         
-        /* --- INVERTED HOVER EFFECT STYLES --- */
+        /* Inverted Hover Effect */
         .inverted-overlay {
-            /* Початковий стан: Видимий блюр та фон */
             background-color: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(5px);
             opacity: 1;
             transition: all 0.4s ease-out;
         }
         .group:hover .inverted-overlay {
-            /* При наведенні: Блюр та фон зникають */
             background-color: rgba(0, 0, 0, 0);
             backdrop-filter: blur(0px);
             opacity: 0;
         }
-
-        /* Текст завжди над фото (z-index) */
         .inverted-content {
             z-index: 40; 
             transition: opacity 0.4s ease-out;
         }
         .group:hover .inverted-content {
-            /* При наведенні: Текст зникає */
             opacity: 0;
         }
-        
-        /* Зображення без сірого фону */
         .project-image {
-            /* Збільшив тривалість для плавності */
             transition: opacity 0.5s ease-in-out, transform 0.7s; 
         }
-        
-        /* Клікнути, щоб змінити UX hint */
         .click-indicator {
             position: absolute;
             top: 10px;
@@ -250,55 +231,53 @@
         .group:hover .click-indicator {
             opacity: 1;
         }
-
-        /* Service Chip Micro Animation */
         .service-btn:hover {
             transform: translateY(-2px) scale(1.02);
             box-shadow: 0 4px 10px rgba(168, 85, 247, 0.2);
             transition: all 0.2s ease-out;
         }
         
-        /* Marquee Effect Container */
-        .marquee-track {
-            animation: marquee var(--marquee-duration) linear infinite; 
-            display: flex;
-            white-space: nowrap; 
+        /* MARQUEE ANIMATION (CSS ONLY METHOD) */
+        @keyframes scroll-marquee-frames {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
+
+        .marquee-track {
+            display: flex;
+            width: max-content; 
+            animation: scroll-marquee-frames 30s linear infinite; 
+        }
+        
         .marquee-track:hover {
             animation-play-state: paused;
         }
         
         .stat-item {
             flex-shrink: 0;
-            font-size: 1.25rem; /* text-xl */
-            font-weight: 700; /* font-bold */
-            margin-right: 3rem; /* 12 */
-            color: #d4d4d8; /* zinc-300 */
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-right: 4rem; 
+            color: #d4d4d8;
+            white-space: nowrap;
         }
         .stat-item span {
-            color: #a855f7; /* purple-500 */
+            color: #a855f7;
         }
-
     </style>
 </head>
 <body class="antialiased selection:bg-purple-500 selection:text-white relative">
 
-    <!-- Cursor Glow Element -->
     <div id="cursor-glow"></div>
-
-    <!-- Scroll Progress Bar -->
     <div id="progress-bar" class="fixed top-0 left-0 h-1.5 bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-500 origin-left z-[60] w-0"></div>
 
     <!-- Navbar -->
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6 bg-transparent">
         <div class="container mx-auto px-6 flex justify-between items-center relative">
-            
-            <!-- Language Switcher -->
             <button id="lang-switch" class="text-white font-bold text-sm tracking-wider hover:text-purple-400 transition-colors z-50">
                 UA / EN
             </button>
 
-            <!-- Desktop Menu -->
             <div class="hidden md:flex space-x-12 absolute left-1/2 transform -translate-x-1/2">
                 <a href="#services" id="nav-services" class="text-gray-300 hover:text-white transition-colors uppercase text-sm tracking-widest font-medium relative group hover:scale-110 duration-300 inline-block">
                     Послуги
@@ -314,7 +293,6 @@
                 </a>
             </div>
 
-            <!-- Mobile Menu Button -->
             <div class="md:hidden">
                 <button id="menu-btn" class="text-white focus:outline-none">
                     <i data-lucide="menu"></i>
@@ -322,7 +300,6 @@
             </div>
         </div>
 
-        <!-- Mobile Menu Dropdown -->
         <div id="mobile-menu" class="hidden md:hidden bg-zinc-900 border-t border-zinc-800 overflow-hidden transition-all duration-300 ease-in-out">
             <div class="flex flex-col p-6 space-y-4">
                 <a href="#services" class="text-left text-gray-300 hover:text-white py-2 mobile-link" id="mob-nav-services">Послуги</a>
@@ -334,7 +311,6 @@
 
     <!-- Hero Section -->
     <section id="home" class="relative h-screen flex flex-col items-center justify-center overflow-hidden bg-black text-white perspective-1000">
-        <!-- Abstract Background Shapes -->
         <div id="blob-1" class="absolute top-20 left-10 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-[80px] opacity-30 animate-blob transition-transform duration-100 ease-out"></div>
         <div id="blob-2" class="absolute bottom-20 right-10 w-96 h-96 bg-indigo-600 rounded-full mix-blend-multiply filter blur-[80px] opacity-30 animate-blob-reverse transition-transform duration-100 ease-out"></div>
         
@@ -353,7 +329,7 @@
                     <!-- Logo Image with Slow Float -->
                     <img 
                        src="IMG/logo.svg" 
-                       id="main-logo-img"
+                       id="main-logo"
                        alt="HUMAN0880 Logo" 
                        class="relative h-24 md:h-40 object-contain drop-shadow-[0_0_35px_rgba(168,85,247,0.7)] z-10 animate-float-slow" 
                        onerror="this.onerror=null; this.src='https://placehold.co/600x150/000000/FFFFFF/png?text=logo.svg+Not+Found'; alert('Файл IMG/logo.svg не знайдено.');"
