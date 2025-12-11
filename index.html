@@ -309,26 +309,38 @@
         <div id="blob-2" class="absolute bottom-20 right-10 w-96 h-96 bg-indigo-600 rounded-full mix-blend-multiply filter blur-[80px] opacity-30 animate-blob-reverse transition-transform duration-100 ease-out"></div>
         
         <div class="container mx-auto px-6 z-10 text-center reveal active flex-grow flex flex-col justify-center">
+            <!-- Typewriter Text Container -->
             <h2 class="text-sm md:text-base text-purple-400 font-bold uppercase mb-8 tracking-[0.3em] min-h-[1.5em]">
                 <span id="typewriter-text"></span><span class="typewriter-cursor"></span>
             </h2>
             
-            <div class="flex justify-center">
-                <div class="relative group p-4 animate-float">
-                    <div class="absolute inset-0 bg-gradient-to-r from-purple-600/30 to-pink-600/30 rounded-full blur-2xl animate-pulse"></div>
-                    <img 
-                       src="IMG/logo.svg" 
-                       id="main-logo"
-                       alt="HUMAN0880 Logo" 
-                       class="relative h-24 md:h-40 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]" 
-                       onerror="this.onerror=null; this.src='https://placehold.co/600x150/000000/FFFFFF/png?text=logo.svg+Not+Found'; alert('Файл IMG/logo.svg не знайдено.');"
-                    />
+            <div class="flex justify-center mb-6">
+                <!-- Levitating & 3D Tilt Logo Container -->
+                <!-- Wrap in animate-float for up/down movement, inner div handles tilt -->
+                <div class="animate-float">
+                    <div id="hero-logo" class="relative group p-10 rounded-full transition-transform duration-100 ease-out cursor-pointer" style="transform-style: preserve-3d">
+                        <div class="absolute inset-0 bg-gradient-to-r from-purple-600/30 to-pink-600/30 rounded-full blur-2xl animate-pulse" style="transform: translateZ(-20px)"></div>
+                        <!-- Local Logo Path -->
+                        <img 
+                        src="IMG/logo.svg" 
+                        id="main-logo"
+                        alt="HUMAN0880 Logo" 
+                        class="relative h-24 md:h-40 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]" 
+                        style="transform: translateZ(30px)"
+                        onerror="this.onerror=null; this.src='https://placehold.co/600x150/000000/FFFFFF/png?text=logo.svg+Not+Found'; alert('Файл IMG/logo.svg не знайдено.');"
+                        />
+                    </div>
                 </div>
             </div>
             
             <p id="hero-desc" class="hidden text-gray-400 max-w-2xl mx-auto text-lg md:text-xl mb-10 leading-relaxed reveal delay-200">
                 <!-- Text populated by JS -->
             </p>
+        </div>
+
+        <!-- Scroll Down Indicator -->
+        <div class="absolute bottom-24 left-1/2 transform -translate-x-1/2 animate-bounce z-20 cursor-pointer" onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})">
+            <i data-lucide="chevron-down" class="w-8 h-8 text-white/50 hover:text-white transition-colors"></i>
         </div>
 
         <!-- Stats Marquee -->
@@ -363,6 +375,7 @@
         <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
                 <div>
+                    <!-- Updated ID for title -->
                     <h2 id="portfolio-title" class="text-4xl md:text-5xl font-bold mb-4">Наші Роботи</h2>
                     <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
                 </div>
@@ -752,6 +765,27 @@
                 telegramBtn.href = baseUrl;
             }
         }
+        
+        // --- LOGO TILT INTERACTION ---
+        const logoWrapper = document.getElementById('hero-logo');
+        if (logoWrapper) {
+             logoWrapper.addEventListener('mousemove', (e) => {
+                 const rect = logoWrapper.getBoundingClientRect();
+                 const x = e.clientX - rect.left;
+                 const y = e.clientY - rect.top;
+                 const centerX = rect.width / 2;
+                 const centerY = rect.height / 2;
+                 const rotateX = ((y - centerY) / centerY) * -20; // Slightly stronger tilt
+                 const rotateY = ((x - centerX) / centerX) * 20;
+
+                 logoWrapper.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+             });
+             
+             logoWrapper.addEventListener('mouseleave', () => {
+                 logoWrapper.style.transform = `rotateX(0) rotateY(0)`;
+             });
+        }
+
 
         function switchLanguage() {
             currentLang = currentLang === 'ua' ? 'en' : 'ua';
