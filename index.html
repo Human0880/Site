@@ -405,21 +405,6 @@
         </div>
     </section>
 
-    <!-- Marquee/Testimonials Section (Replaced old testimonials section) -->
-    <section id="marquee" class="bg-zinc-900 text-white py-10 overflow-hidden">
-        <div class="container mx-auto px-0 md:px-6">
-            <!-- Testimonial Marquee Container -->
-            <!-- The marquee-track class applies the CSS animation -->
-            <div class="overflow-hidden relative">
-                <div id="testimonial-carousel" class="flex marquee-track hover:animation-pause"> 
-                    <!-- Testimonial Cards injected by JS (duplicated for seamless loop) -->
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End Marquee Section -->
-
-
     <!-- Contact Section -->
     <section id="contact" class="py-24 bg-zinc-950 text-white relative overflow-hidden">
         <!-- Background Glow -->
@@ -461,7 +446,7 @@
                             </div>
                             <div>
                                 <p class="text-sm text-gray-500 uppercase tracking-wider">Telegram</p>
-                                <a href="https://t.me/Human0880" target="_blank" class="text-lg font-medium hover:text-purple-400 transition-colors">@Human0880</a>
+                                <a href="https://t.me/Human0880" target="_blank" class="text-lg font-medium hover:text-purple-400 transition-colors">@human0880</a>
                             </div>
                         </div>
                     </div>
@@ -649,13 +634,7 @@
             });
         }, observerOptions);
 
-        // --- CAROUSEL STATE ---
-        let currentSlide = 0;
-        let slideWidth = 0;
-        const totalSlides = translations.ua.testimonials.items.length;
-        let carouselInterval; // Added variable for auto-scroll interval
-
-        // --- CAROUSEL LOGIC (Marquee) ---
+        // --- CAROUSEL HELPER FUNCTIONS (Moved UP) ---
         function updateCarouselDimensions() {
              const carousel = document.getElementById('testimonial-carousel');
              
@@ -674,7 +653,7 @@
              
              // The marquee needs the content doubled for seamless loop.
              // Total visible width + width of one entire copy.
-             const copyWidth = (calculatedCardWidth + gap) * totalSlides;
+             const copyWidth = (calculatedCardWidth + gap) * translations[currentLang].testimonials.items.length;
              carousel.style.width = `${copyWidth * 2}px`;
              
              // Update width of each card element
@@ -683,8 +662,15 @@
              });
         }
         
-        // Removed moveCarousel, updateCarouselPosition, stop/start AutoScroll 
-        // as the Marquee is now CSS-driven.
+        // This function is not used in marquee effect, but included for completeness if requested later.
+        function updateCarouselPosition() {
+            // Not needed for CSS marquee
+        }
+
+        // This function is not used in marquee effect, but included for completeness if requested later.
+        function moveCarousel(direction) {
+            // Not needed for CSS marquee
+        }
 
 
         // --- RENDER FUNCTIONS ---
@@ -713,10 +699,6 @@
             // Portfolio
             document.getElementById('portfolio-title').textContent = t.portfolio.title;
 
-            // Testimonials (No title/desc in HTML now)
-            // document.getElementById('testimonials-title').textContent = t.testimonials.title;
-            // document.getElementById('testimonials-desc').textContent = t.testimonials.desc;
-
             // Contact
             document.getElementById('contact-title').innerHTML = t.contact.title;
             document.getElementById('contact-subtitle').textContent = t.contact.subtitle;
@@ -729,40 +711,7 @@
         }
 
         function renderTestimonials() {
-            const carousel = document.getElementById('testimonial-carousel');
-            carousel.innerHTML = '';
-            const t = translations[currentLang];
-
-            // Render content twice for seamless loop
-            const renderContent = (items) => {
-                items.forEach(item => {
-                    const card = document.createElement('div');
-                    // Changed class to marquee-card-wrapper for dynamic width calculation
-                    // Removed dynamic width logic here, using CSS class for final look
-                    card.className = "testimonial-card p-8 md:p-12 bg-zinc-800/70 border border-zinc-700 rounded-xl flex-shrink-0 ml-6 first:ml-0"; 
-                    
-                    // Added fixed min-height for better stability during marquee animation
-                    card.style.minHeight = '250px'; 
-                    
-                    card.innerHTML = `
-                        <p class="text-3xl font-serif text-purple-400 mb-6">“</p>
-                        <p class="text-xl italic text-gray-300 mb-8 leading-relaxed">${item.text}</p>
-                        <div class="flex items-center">
-                            <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-lg font-bold">${item.author.charAt(0)}</div>
-                            <div class="ml-4">
-                                <p class="font-bold text-white">${item.author}</p>
-                                <p class="text-sm text-gray-400">${item.position}</p>
-                            </div>
-                        </div>
-                    `;
-                    carousel.appendChild(card);
-                });
-            };
-
-            renderContent(t.testimonials.items);
-            renderContent(t.testimonials.items); // Duplicate for seamless loop
-            
-            updateCarouselDimensions();
+            // REMOVED: Testimonial rendering logic since the section is gone
         }
         
         function renderServices() {
@@ -921,6 +870,7 @@
             t.contact.chips.forEach(srv => {
                 const btn = document.createElement('button');
                 btn.textContent = srv;
+                // FIXED: Syntax error, closing quotes on className
                 btn.className = "service-btn border border-zinc-700 bg-zinc-900/50 text-gray-400 px-4 py-3 rounded-lg text-sm font-medium hover:border-purple-500 hover:text-white transition-all duration-200 text-left";
                 
                 btn.addEventListener('click', () => {
@@ -998,7 +948,7 @@
             renderServices();
             renderPortfolio();
             renderContactChips();
-            renderTestimonials(); // Update testimonials on language change
+            // renderTestimonials(); // Removed call
             startTypewriter();
         }
 
@@ -1013,7 +963,7 @@
         renderServices();
         renderPortfolio();
         renderContactChips();
-        renderTestimonials(); // Initial render for testimonials
+        // renderTestimonials(); // Removed call
         startTypewriter();
 
         // Initialize Lucide Icons
@@ -1084,10 +1034,9 @@
             if(blob2) blob2.style.transform = `translate(${moveX}px, ${moveY}px)`;
         });
 
-        // Responsive Carousel Fix
+        // Responsive Carousel Fix (now redundant, but kept if future elements need resizing logic)
         window.addEventListener('resize', () => {
-            updateCarouselDimensions();
-            // No need to update position on resize for marquee, but dimensions are critical
+            // updateCarouselDimensions(); // Removed since no carousel
         });
 
     </script>
