@@ -27,6 +27,7 @@
                         'blob-reverse': 'blob-reverse 18s infinite',
                         'cursor': 'cursor .75s step-end infinite',
                         'icon-jump': 'icon-jump 0.5s ease-in-out',
+                        'marquee': 'marquee 60s linear infinite', /* Додано keyframe marquee */
                     },
                     keyframes: {
                         float: {
@@ -53,6 +54,11 @@
                             '0%': { transform: 'translateY(0) scale(1)' },
                             '50%': { transform: 'translateY(-5px) scale(1.1)' },
                             '100%': { transform: 'translateY(0) scale(1)' },
+                        },
+                        /* Keyframe for Marquee Effect */
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' }, /* Рухає на половину ширини (для циклу) */
                         }
                     }
                 }
@@ -259,6 +265,34 @@
             pointer-events: none;
             z-index: -1;
         }
+
+        /* Marquee Effect Container */
+        .marquee-track {
+            animation: marquee 60s linear infinite;
+            display: flex;
+            padding-right: 24px; /* Space for the last element */
+            white-space: nowrap; /* Prevent wrapping of inner content */
+            width: 200%; /* Double width for seamless looping */
+        }
+        
+        .marquee-card-wrapper {
+            flex-shrink: 0;
+            width: 100%; /* Default width for one card */
+            /* Налаштування ширини для адаптивності: */
+            width: 95vw; /* 100% width on mobile */
+        }
+        
+        @media (min-width: 768px) {
+            .marquee-card-wrapper {
+                width: calc(50vw - 48px); /* Adjust width for desktop view (approx 2 cards + margins) */
+            }
+        }
+        
+        @media (min-width: 1024px) {
+             .marquee-card-wrapper {
+                width: calc(50vw - 48px);
+            }
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-purple-500 selection:text-white relative">
@@ -396,23 +430,15 @@
                 </p>
             </div>
 
-            <!-- Testimonial Carousel Container -->
-            <div class="overflow-hidden relative">
-                <!-- Added padding-bottom to prevent jump during resize -->
-                <div id="testimonial-carousel" class="flex transition-transform duration-700 ease-in-out pb-2" style="width: fit-content;">
-                    <!-- Testimonial Cards injected by JS -->
+            <!-- Testimonial Marquee Container -->
+            <div class="overflow-hidden relative pointer-events-none lg:pointer-events-auto">
+                <!-- Removed fixed width and added animation class -->
+                <div id="testimonial-carousel" class="flex marquee-track hover:animation-pause"> 
+                    <!-- Testimonial Cards injected by JS (duplicated for seamless loop) -->
                 </div>
             </div>
 
-            <div class="flex justify-center mt-8 space-x-3">
-                <button onclick="moveCarousel(-1)" class="w-10 h-10 rounded-full bg-zinc-800 text-purple-400 hover:bg-purple-500 hover:text-white transition-colors flex items-center justify-center">
-                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
-                </button>
-                <button onclick="moveCarousel(1)" class="w-10 h-10 rounded-full bg-zinc-800 text-purple-400 hover:bg-purple-500 hover:text-white transition-colors flex items-center justify-center">
-                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
-                </button>
-            </div>
-
+            <!-- Removed navigation buttons for marquee effect -->
         </div>
     </section>
     <!-- End Testimonials Section -->
@@ -653,17 +679,36 @@
         const totalSlides = translations.ua.testimonials.items.length;
         let carouselInterval; // Added variable for auto-scroll interval
 
-        // --- CAROUSEL LOGIC ---
-        function startCarouselAutoScroll() {
-            if (carouselInterval) clearInterval(carouselInterval);
-            carouselInterval = setInterval(() => {
-                moveCarousel(1);
-            }, 5000); // Scrolls every 5 seconds
+        // --- CAROUSEL LOGIC (Marquee) ---
+        function updateCarouselDimensions() {
+             const carousel = document.getElementById('testimonial-carousel');
+             
+             // Define card width based on desktop (2 cards + margin) or mobile (1 card + margin)
+             const cardsPerView = window.innerWidth >= 1024 ? 2 : 1; 
+             const containerWidth = carousel.parentElement.clientWidth;
+             const gap = 24; // ml-6
+             
+             // Calculate the width of one card element
+             let calculatedCardWidth;
+             if (cardsPerView === 2) {
+                 calculatedCardWidth = (containerWidth - gap) / 2;
+             } else {
+                 calculatedCardWidth = containerWidth;
+             }
+             
+             // The marquee needs the content doubled for seamless loop.
+             // Total visible width + width of one entire copy.
+             const copyWidth = (calculatedCardWidth + gap) * totalSlides;
+             carousel.style.width = `${copyWidth * 2}px`;
+             
+             // Update width of each card element
+             document.querySelectorAll('.testimonial-card').forEach(card => {
+                card.style.width = `${calculatedCardWidth}px`;
+             });
         }
-
-        function stopCarouselAutoScroll() {
-            clearInterval(carouselInterval);
-        }
+        
+        // Removed moveCarousel, updateCarouselPosition, stop/start AutoScroll 
+        // as the Marquee is now CSS-driven.
 
 
         // --- RENDER FUNCTIONS ---
@@ -712,79 +757,33 @@
             carousel.innerHTML = '';
             const t = translations[currentLang];
 
-            t.testimonials.items.forEach(item => {
-                const card = document.createElement('div');
-                card.className = "testimonial-card p-8 md:p-12 bg-zinc-800/70 border border-zinc-700 rounded-xl flex-shrink-0 w-full lg:w-[calc(50%-1.5rem)] ml-6 first:ml-0"; // Dynamic sizing
-                card.innerHTML = `
-                    <p class="text-3xl font-serif text-purple-400 mb-6">“</p>
-                    <p class="text-xl italic text-gray-300 mb-8 leading-relaxed">${item.text}</p>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-lg font-bold">${item.author.charAt(0)}</div>
-                        <div class="ml-4">
-                            <p class="font-bold text-white">${item.author}</p>
-                            <p class="text-sm text-gray-400">${item.position}</p>
+            // Render content twice for seamless loop
+            const renderContent = (items) => {
+                items.forEach(item => {
+                    const card = document.createElement('div');
+                    // Changed class to marquee-card-wrapper for dynamic width calculation
+                    card.className = "testimonial-card marquee-card-wrapper p-8 md:p-12 bg-zinc-800/70 border border-zinc-700 rounded-xl flex-shrink-0 ml-6 first:ml-0"; 
+                    card.innerHTML = `
+                        <p class="text-3xl font-serif text-purple-400 mb-6">“</p>
+                        <p class="text-xl italic text-gray-300 mb-8 leading-relaxed">${item.text}</p>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-lg font-bold">${item.author.charAt(0)}</div>
+                            <div class="ml-4">
+                                <p class="font-bold text-white">${item.author}</p>
+                                <p class="text-sm text-gray-400">${item.position}</p>
+                            </div>
                         </div>
-                    </div>
-                `;
-                carousel.appendChild(card);
-            });
+                    `;
+                    carousel.appendChild(card);
+                });
+            };
+
+            renderContent(t.testimonials.items);
+            renderContent(t.testimonials.items); // Duplicate for seamless loop
             
-            // Re-attach hover events to stop/start auto scroll
-            carousel.parentElement.onmouseenter = stopCarouselAutoScroll;
-            carousel.parentElement.onmouseleave = startCarouselAutoScroll;
-            
-            // Set initial slide position and width based on current viewport
             updateCarouselDimensions();
-            currentSlide = 0;
-            updateCarouselPosition();
-            startCarouselAutoScroll(); // Start auto-scroll after rendering
         }
         
-        function updateCarouselDimensions() {
-             const carousel = document.getElementById('testimonial-carousel');
-             const containerWidth = carousel.parentElement.clientWidth;
-             // Calculate width for 1 or 2 cards depending on screen size
-             // Use 1 card view if screen is small, 2 if screen is large
-             const cardsPerView = window.innerWidth >= 1024 ? 2 : 1; 
-             
-             // The width of a single card plus its margin (24px for ml-6)
-             slideWidth = (containerWidth / cardsPerView) - (cardsPerView > 1 ? 12 : 0); 
-             
-             // Calculate total width of the inner flex container
-             carousel.style.width = `${totalSlides * (slideWidth + 24)}px`;
-             
-             // Update width of each card element
-             document.querySelectorAll('.testimonial-card').forEach(card => {
-                card.style.width = `${slideWidth}px`;
-             });
-        }
-        
-        function updateCarouselPosition() {
-            const carousel = document.getElementById('testimonial-carousel');
-            const offset = currentSlide * (slideWidth + 24); // 24px is the gap (ml-6)
-            carousel.style.transform = `translateX(-${offset}px)`;
-        }
-
-        function moveCarousel(direction) {
-            const cardsPerView = window.innerWidth >= 1024 ? 2 : 1;
-            const maxScrollableSlides = totalSlides - cardsPerView;
-            
-            let newSlide = currentSlide + direction;
-
-            // Handle cycling/boundaries
-            if (newSlide > maxScrollableSlides) {
-                newSlide = 0; // Wrap to start
-            } else if (newSlide < 0) {
-                newSlide = maxScrollableSlides; // Wrap to end
-            }
-
-            currentSlide = newSlide;
-            updateCarouselPosition();
-        }
-        // Expose moveCarousel globally for button clicks
-        window.moveCarousel = moveCarousel;
-
-
         function renderServices() {
             const servicesGrid = document.getElementById('services-grid');
             servicesGrid.innerHTML = '';
@@ -1107,7 +1106,7 @@
         // Responsive Carousel Fix
         window.addEventListener('resize', () => {
             updateCarouselDimensions();
-            updateCarouselPosition();
+            // No need to update position on resize for marquee, but dimensions are critical
         });
 
     </script>
