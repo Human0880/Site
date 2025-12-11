@@ -27,7 +27,7 @@
                         'blob-reverse': 'blob-reverse 18s infinite',
                         'cursor': 'cursor .75s step-end infinite',
                         'icon-jump': 'icon-jump 0.5s ease-in-out',
-                        'marquee': 'marquee 30s linear infinite', /* Зменшив швидкість для тексту */
+                        'marquee': 'marquee var(--marquee-duration) linear infinite', /* Змінна для швидкості */
                     },
                     keyframes: {
                         float: {
@@ -254,10 +254,12 @@
         
         /* Marquee Effect Container */
         .marquee-track {
-            animation: marquee 30s linear infinite; /* Зменшив швидкість для тексту */
+            animation: marquee var(--marquee-duration) linear infinite; /* Змінна швидкості */
             display: flex;
-            white-space: nowrap; /* Prevent wrapping of inner content */
-            width: fit-content; /* Дозволяє вмісту займати необхідну ширину */
+            white-space: nowrap; 
+        }
+        .marquee-track:hover {
+            animation-play-state: paused;
         }
         
         .stat-item {
@@ -655,34 +657,56 @@
         // --- CAROUSEL HELPER FUNCTIONS (Moved UP) ---
         function updateCarouselDimensions() {
              const track = document.getElementById('stats-track');
-             if (!track) return;
+             if (!track || track.children.length === 0) return;
 
-             // Width of the content inside the track
-             let totalContentWidth = 0;
-             document.querySelectorAll('#stats-track .stat-item').forEach(item => {
-                 totalContentWidth += item.offsetWidth;
-             });
+             // 1. Measure the width of one copy of the duplicated content
+             // We use scrollWidth / 2 is the most robust way when content is duplicated.
+             
+             // Temporarily set width to fit-content to force actual width calculation
+             track.style.width = 'fit-content';
+             
+             // The full rendered width (containing two copies of content)
+             const fullContentWidth = track.scrollWidth;
+             
+             // One cycle is half the rendered width
+             const measuredWidth = fullContentWidth / 2;
 
-             // The track width must be double the content width for the seamless loop
-             track.style.width = `${totalContentWidth * 2}px`;
+             // 2. Set the track width to double the cycle width for seamless looping
+             track.style.width = `${measuredWidth * 2}px`;
 
-             // Set animation speed based on width to maintain smoothness
-             const speed = totalContentWidth / 40; // 40px/sec is an estimate
-             track.style.animationDuration = `${speed}s`;
+             // 3. Set animation speed
+             const speed = measuredWidth / 40; // 40px/sec is a constant speed
+             document.documentElement.style.setProperty('--marquee-duration', `${speed}s`);
         }
         
-        // This function is not used in marquee effect, but included for completeness if requested later.
-        function updateCarouselPosition() {
-            // Not needed for CSS marquee
+        function renderStatsMarquee() {
+            const track = document.getElementById('stats-track');
+            if (!track) return;
+            track.innerHTML = '';
+            
+            const stats = translations[currentLang].stats;
+
+            // Render content twice for seamless loop
+            const renderContent = (items) => {
+                items.forEach(stat => {
+                    const div = document.createElement('div');
+                    div.className = "stat-item";
+                    div.innerHTML = stat;
+                    track.appendChild(div);
+                });
+            };
+
+            renderContent(stats);
+            renderContent(stats); // Duplicate for seamless loop
+            
+            // Wait for elements to be rendered, then calculate dimensions
+            // Use requestAnimationFrame for reliable DOM measurement after painting
+            requestAnimationFrame(() => {
+                 updateCarouselDimensions();
+            });
         }
+        // --- END CAROUSEL HELPER FUNCTIONS ---
 
-        // This function is not used in marquee effect, but included for completeness if requested later.
-        function moveCarousel(direction) {
-            // Not needed for CSS marquee
-        }
-
-
-        // --- RENDER FUNCTIONS ---
 
         function updateStaticText() {
             const t = translations[currentLang];
@@ -718,31 +742,6 @@
             // Footer
             document.getElementById('footer-rights').textContent = t.footer.rights;
         }
-
-        function renderStatsMarquee() {
-            const track = document.getElementById('stats-track');
-            if (!track) return;
-            track.innerHTML = '';
-            
-            const stats = translations[currentLang].stats;
-
-            // Render content twice for seamless loop
-            const renderContent = (items) => {
-                items.forEach(stat => {
-                    const div = document.createElement('div');
-                    div.className = "stat-item";
-                    div.innerHTML = stat;
-                    track.appendChild(div);
-                });
-            };
-
-            renderContent(stats);
-            renderContent(stats); // Duplicate for seamless loop
-            
-            // Wait for elements to be rendered, then calculate dimensions
-            setTimeout(updateCarouselDimensions, 50); 
-        }
-
         
         function renderServices() {
             const servicesGrid = document.getElementById('services-grid');
