@@ -252,8 +252,6 @@
             transition: all 0.2s ease-out;
         }
         
-        /* Logo Reflection Effect - REMOVED */
-
         /* Marquee Effect Container */
         .marquee-track {
             animation: marquee 60s linear infinite;
@@ -407,28 +405,19 @@
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section id="testimonials" class="py-24 bg-zinc-900 text-white relative">
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="text-center mb-16 reveal">
-                <h2 id="testimonials-title" class="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">Відгуки Клієнтів</h2>
-                <p id="testimonials-desc" class="mt-6 text-gray-400 text-lg max-w-2xl mx-auto">
-                    Ми пишаємося результатами нашої роботи та відгуками, які отримуємо.
-                </p>
-            </div>
-
+    <!-- Marquee/Testimonials Section (Replaced old testimonials section) -->
+    <section id="marquee" class="bg-zinc-900 text-white py-10 overflow-hidden">
+        <div class="container mx-auto px-0 md:px-6">
             <!-- Testimonial Marquee Container -->
-            <div class="overflow-hidden relative pointer-events-none lg:pointer-events-auto">
-                <!-- Removed fixed width and added animation class -->
+            <!-- The marquee-track class applies the CSS animation -->
+            <div class="overflow-hidden relative">
                 <div id="testimonial-carousel" class="flex marquee-track hover:animation-pause"> 
                     <!-- Testimonial Cards injected by JS (duplicated for seamless loop) -->
                 </div>
             </div>
-
-            <!-- Removed navigation buttons for marquee effect -->
         </div>
     </section>
-    <!-- End Testimonials Section -->
+    <!-- End Marquee Section -->
 
 
     <!-- Contact Section -->
@@ -724,9 +713,9 @@
             // Portfolio
             document.getElementById('portfolio-title').textContent = t.portfolio.title;
 
-            // Testimonials
-            document.getElementById('testimonials-title').textContent = t.testimonials.title;
-            document.getElementById('testimonials-desc').textContent = t.testimonials.desc;
+            // Testimonials (No title/desc in HTML now)
+            // document.getElementById('testimonials-title').textContent = t.testimonials.title;
+            // document.getElementById('testimonials-desc').textContent = t.testimonials.desc;
 
             // Contact
             document.getElementById('contact-title').innerHTML = t.contact.title;
@@ -749,7 +738,12 @@
                 items.forEach(item => {
                     const card = document.createElement('div');
                     // Changed class to marquee-card-wrapper for dynamic width calculation
-                    card.className = "testimonial-card marquee-card-wrapper p-8 md:p-12 bg-zinc-800/70 border border-zinc-700 rounded-xl flex-shrink-0 ml-6 first:ml-0"; 
+                    // Removed dynamic width logic here, using CSS class for final look
+                    card.className = "testimonial-card p-8 md:p-12 bg-zinc-800/70 border border-zinc-700 rounded-xl flex-shrink-0 ml-6 first:ml-0"; 
+                    
+                    // Added fixed min-height for better stability during marquee animation
+                    card.style.minHeight = '250px'; 
+                    
                     card.innerHTML = `
                         <p class="text-3xl font-serif text-purple-400 mb-6">“</p>
                         <p class="text-xl italic text-gray-300 mb-8 leading-relaxed">${item.text}</p>
