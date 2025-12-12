@@ -113,7 +113,6 @@
         .card-3d {
             transform-style: preserve-3d;
             will-change: transform;
-            /* Ефект "вдавленості" для картки */
             box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.5);
         }
         
@@ -405,9 +404,11 @@
             </p>
         </div>
 
-        <!-- Scroll Down Indicator -->
-        <div class="absolute bottom-32 left-1/2 transform -translate-x-1/2 animate-bounce z-20 cursor-pointer" onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})">
-            <i data-lucide="chevron-down" class="w-8 h-8 text-white/50 hover:text-white transition-colors"></i>
+        <!-- Scroll Down Indicator (Fixed Centering) -->
+        <div class="absolute bottom-32 w-full flex justify-center z-20 pointer-events-none">
+            <div class="animate-bounce cursor-pointer pointer-events-auto" onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})">
+                <i data-lucide="chevron-down" class="w-8 h-8 text-white/50 hover:text-white transition-colors"></i>
+            </div>
         </div>
 
         <!-- Stats Marquee -->
@@ -421,10 +422,15 @@
     </section>
 
     <!-- Services Section -->
-    <section id="services" class="py-24 bg-zinc-950 text-white relative">
+    <section id="services" class="py-24 bg-zinc-950 text-white relative overflow-hidden">
+        <!-- New Background Effect: Logo Watermark -->
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] opacity-[0.03] pointer-events-none z-0">
+             <img src="IMG/logo.svg" class="w-full h-full object-contain animate-spin-slow" alt="">
+        </div>
+
         <div class="container mx-auto px-6 relative z-10">
             <div class="text-center mb-20 reveal">
-                <h2 id="services-title" class="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">Наші Послуги</h2>
+                <h2 id="services-title" class="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">Послуги</h2>
                 <div class="h-1 w-24 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full transition-all duration-1000 ease-out" style="width: 6rem;"></div>
                 <p id="services-desc" class="mt-6 text-gray-400 text-lg max-w-2xl mx-auto">
                     <!-- Desc populated by JS -->
@@ -441,7 +447,7 @@
     <section id="process" class="py-24 bg-black text-white relative">
         <div class="container mx-auto px-6 relative z-10">
             <div class="text-center mb-20 reveal">
-                <h2 id="process-title" class="text-3xl md:text-5xl font-bold mb-6">Як ми працюємо</h2>
+                <h2 id="process-title" class="text-3xl md:text-5xl font-bold mb-6">Процес</h2>
                  <div class="h-1 w-24 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
             </div>
             
@@ -457,7 +463,7 @@
             <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
                 <div>
                     <!-- Updated ID for title -->
-                    <h2 id="portfolio-title" class="text-4xl md:text-5xl font-bold mb-4">Наші Роботи</h2>
+                    <h2 id="portfolio-title" class="text-4xl md:text-5xl font-bold mb-4">Роботи</h2>
                     <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
                 </div>
             </div>
@@ -585,67 +591,68 @@
 
     <!-- JavaScript -->
     <script>
-        // PRICING DATA (UAH)
+        // PRICING DATA (UAH & USD)
+        // Calculated USD roughly ~41 UAH/$1 and rounded
         const pricingData = {
             identity: {
                 types: [
-                    { id: 'logo', label: { ua: 'Логотип', en: 'Logo' }, price: 500 },
-                    { id: 'guide', label: { ua: 'Лого + Міні-гід', en: 'Logo + Mini Guide' }, price: 1500 },
-                    { id: 'brandbook', label: { ua: 'Міні-Брендбук', en: 'Mini Brandbook' }, price: 3000 }
+                    { id: 'logo', label: { ua: 'Логотип', en: 'Logo' }, priceUa: 750, priceUsd: 20 },
+                    { id: 'guide', label: { ua: 'Лого + Міні-гід', en: 'Logo + Mini Guide' }, priceUa: 1500, priceUsd: 40 },
+                    { id: 'brandbook', label: { ua: 'Міні-Брендбук', en: 'Mini Brandbook' }, priceUa: 3500, priceUsd: 90 }
                 ]
             },
             outdoor: {
                 types: [
-                    { id: 'banner', label: { ua: 'Сітілайт / Борд / Банер', en: 'Citylight / Board / Banner' }, price: 400 },
-                    { id: 'adapt', label: { ua: 'Комплект адаптацій', en: 'Adaptation Set' }, price: 550 }
+                    { id: 'banner', label: { ua: 'Сітілайт / Борд / Банер', en: 'Citylight / Board / Banner' }, priceUa: 600, priceUsd: 15 },
+                    { id: 'adapt', label: { ua: 'Комплект адаптацій', en: 'Adaptation Set' }, priceUa: 150, priceUsd: 5 } // Using 150 from list as base/add
                 ]
             },
             presentation: {
                 types: [
-                    { id: 'slide', label: { ua: '1 слайд', en: '1 slide' }, price: 70 },
-                    { id: 'std', label: { ua: 'До 15 слайдів', en: 'Up to 15 slides' }, price: 1000 },
-                    { id: 'ext', label: { ua: 'Розширена (25+ слайдів)', en: 'Extended (25+ slides)' }, price: 1800 }
+                    { id: 'slide', label: { ua: '1 слайд', en: '1 slide' }, priceUa: 70, priceUsd: 2 },
+                    { id: 'std', label: { ua: 'До 15 слайдів', en: 'Up to 15 slides' }, priceUa: 1150, priceUsd: 30 },
+                    { id: 'ext', label: { ua: 'Розширена (25+ слайдів)', en: 'Extended (25+ slides)' }, priceUa: 2000, priceUsd: 50 }
                 ]
             },
             print: {
                 types: [
-                    { id: 'poster', label: { ua: 'Постер / Афіша', en: 'Poster / Affiche' }, price: 350 },
-                    { id: 'flyer', label: { ua: 'Флаєр A5', en: 'Flyer A5' }, price: 300 },
-                    { id: 'brochure', label: { ua: 'Брошура (до 8 стор.)', en: 'Brochure (up to 8 pages)' }, price: 700 },
-                    { id: 'magazine', label: { ua: 'Журнал (10-20 стор.)', en: 'Magazine (10-20 pages)' }, price: 1300 }
+                    { id: 'poster', label: { ua: 'Постер / Афіша', en: 'Poster / Affiche' }, priceUa: 425, priceUsd: 10 },
+                    { id: 'flyer', label: { ua: 'Флаєр A5', en: 'Flyer A5' }, priceUa: 300, priceUsd: 8 },
+                    { id: 'brochure', label: { ua: 'Брошура (до 8 стор.)', en: 'Brochure (up to 8 pages)' }, priceUa: 850, priceUsd: 20 },
+                    { id: 'magazine', label: { ua: 'Журнал (10-20 стор.)', en: 'Magazine (10-20 pages)' }, priceUa: 1750, priceUsd: 45 }
                 ]
             },
             invitations: {
                 types: [
-                    { id: 'single', label: { ua: 'Один макет', en: 'One layout' }, price: 250 },
-                    { id: 'choice', label: { ua: 'Два стилі на вибір', en: 'Two styles choice' }, price: 400 }
+                    { id: 'single', label: { ua: 'Один макет', en: 'One layout' }, priceUa: 325, priceUsd: 8 },
+                    { id: 'choice', label: { ua: 'Два стилі на вибір', en: 'Two styles choice' }, priceUa: 475, priceUsd: 12 } // 325 + 150
                 ]
             },
             social: {
                 types: [
-                    { id: 'banner', label: { ua: 'Банер Instagram/FB', en: 'Banner Insta/FB' }, price: 200 },
-                    { id: 'pack', label: { ua: 'Пакет (5 банерів)', en: 'Pack (5 banners)' }, price: 900 },
-                    { id: 'profile', label: { ua: 'Обкладинка + аватар + шаблон', en: 'Cover + Avatar + Template' }, price: 500 }
+                    { id: 'banner', label: { ua: 'Банер Instagram/FB', en: 'Banner Insta/FB' }, priceUa: 400, priceUsd: 10 }, // INCREASED START PRICE to 400 UAH
+                    { id: 'pack', label: { ua: 'Пакет (5 банерів)', en: 'Pack (5 banners)' }, priceUa: 1800, priceUsd: 45 },
+                    { id: 'profile', label: { ua: 'Обкладинка + аватар + шаблон', en: 'Cover + Avatar + Template' }, priceUa: 1000, priceUsd: 25 }
                 ]
             },
             packaging: {
                 types: [
-                    { id: 'label', label: { ua: 'Етикетка / стікер', en: 'Label / Sticker' }, price: 500 },
-                    { id: 'box', label: { ua: 'Дизайн коробки', en: 'Box Design' }, price: 1000 }
+                    { id: 'label', label: { ua: 'Етикетка / стікер', en: 'Label / Sticker' }, priceUa: 500, priceUsd: 15 },
+                    { id: 'box', label: { ua: 'Дизайн коробки', en: 'Box Design' }, priceUa: 1250, priceUsd: 30 }
                 ]
             },
             photo: {
                 types: [
-                    { id: 'light', label: { ua: 'Легка ретуш', en: 'Light Retouch' }, price: 40 },
-                    { id: 'pro', label: { ua: 'Професійна ретуш', en: 'Pro Retouch' }, price: 100 },
-                    { id: 'art', label: { ua: 'Художня обробка', en: 'Artistic Editing' }, price: 150 }
+                    { id: 'light', label: { ua: 'Легка ретуш', en: 'Light Retouch' }, priceUa: 100, priceUsd: 3 }, // INCREASED
+                    { id: 'pro', label: { ua: 'Професійна ретуш', en: 'Pro Retouch' }, priceUa: 250, priceUsd: 7 }, // INCREASED
+                    { id: 'art', label: { ua: 'Художня обробка', en: 'Artistic Editing' }, priceUa: 500, priceUsd: 13 } // INCREASED
                 ]
             },
             web: {
                 types: [
-                    { id: 'landing', label: { ua: 'Лендінг (1 сторінка)', en: 'Landing (1 page)' }, price: 1600 },
-                    { id: 'site', label: { ua: 'Сайт 3-5 сторінок', en: 'Site 3-5 pages' }, price: 3500 },
-                    { id: 'app', label: { ua: 'UI/UX додатку', en: 'App UI/UX' }, price: 5000 }
+                    { id: 'landing', label: { ua: 'Лендінг (1 сторінка)', en: 'Landing (1 page)' }, priceUa: 2050, priceUsd: 50 },
+                    { id: 'site', label: { ua: 'Сайт 3-5 сторінок', en: 'Site 3-5 pages' }, priceUa: 4500, priceUsd: 110 },
+                    { id: 'app', label: { ua: 'UI/UX додатку', en: 'App UI/UX' }, priceUa: 5000, priceUsd: 125 }
                 ]
             }
         };
@@ -665,7 +672,7 @@
                     "Брендів Розроблено <span>30+</span>"
                 ],
                 services: {
-                    title: "Наші Послуги",
+                    title: "Послуги",
                     desc: "Повний спектр дизайн-рішень для розвитку вашого бренду в офлайн та онлайн середовищі.",
                     items: [
                         { title: "Розробка Фірмового Стилю", description: "Від логотипу до візиток, я забезпечу вас унікальним брендбуком, який розповість історію вашого бренду.", icon: "palette", color: "from-pink-500 to-rose-500" },
@@ -680,7 +687,7 @@
                     ]
                 },
                 process: {
-                    title: "Як ми працюємо",
+                    title: "Процес",
                     items: [
                         { step: "01", title: "Бриф", desc: "Обговорення задачі та цілей проекту." },
                         { step: "02", title: "Дослідження", desc: "Аналіз ринку та конкурентів." },
@@ -689,7 +696,7 @@
                     ]
                 },
                 portfolio: {
-                    title: "Наші Роботи",
+                    title: "Роботи",
                     items: [
                         { id: 1, title: "Веб-Дизайн", subtitle: "Сучасні та зручні інтерфейси", filePrefix: "Web Design", imgCount: 3 },
                         { id: 2, title: "Логотипи", subtitle: "Унікальний знак бренду", filePrefix: "Logos", imgCount: 3 },
@@ -700,11 +707,8 @@
                 contact: {
                     title: "Давайте створимо щось <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500'>унікальне</span> разом.",
                     subtitle: "Готові розпочати проект? Напишіть нам, і ми обговоримо, як можемо допомогти вашому бізнесу вирости через дизайн.",
-                    question: "Що вас цікавить?",
-                    chips: ["Фірмовий Стиль", "Зовнішня Реклама", "Презентації", "Брошури/Постери", "Запрошення", "Банери", "Упаковка", "Обробка Фото", "Веб/APP Дизайн"],
-                    btnTelegram: "Написати в Telegram",
-                    btnInstagram: "Написати в Instagram",
-                    telegramMsgPrefix: "Вітаю! Мене цікавить послуга: "
+                    telegramMsgPrefix: "Вітаю! Мене цікавить: ",
+                    urgentText: "Терміново"
                 },
                 calculator: {
                     title: "Калькулятор Вартості",
@@ -732,7 +736,7 @@
                 footer: { rights: "Всі права захищено." }
             },
             en: {
-                nav: { services: "Services", process: "Process", portfolio: "Portfolio", contact: "Contact" },
+                nav: { services: "Services", process: "Process", portfolio: "Works", contact: "Contact" },
                 hero: {
                     typewriter: "Visual Identity & Web Design",
                     desc: "We turn chaos of ideas into design structure. Complex solutions for your business: from logo to website."
@@ -745,7 +749,7 @@
                     "Brands Developed <span>30+</span>"
                 ],
                 services: {
-                    title: "Our Services",
+                    title: "Services",
                     desc: "Full range of design solutions for your brand development in offline and online environments.",
                     items: [
                         { title: "Brand Identity", description: "From logo to business cards, I will provide you with a unique brandbook that tells your brand's story.", icon: "palette", color: "from-pink-500 to-rose-500" },
@@ -760,7 +764,7 @@
                     ]
                 },
                 process: {
-                    title: "How We Work",
+                    title: "Process",
                     items: [
                         { step: "01", title: "Briefing", desc: "Discussing tasks and project goals." },
                         { step: "02", title: "Research", desc: "Market and competitor analysis." },
@@ -769,7 +773,7 @@
                     ]
                 },
                 portfolio: {
-                    title: "Our Works",
+                    title: "Works",
                     items: [
                         { id: 1, title: "Web Design", subtitle: "Modern & user-friendly interfaces", filePrefix: "Web Design", imgCount: 3 },
                         { id: 2, title: "Logos", subtitle: "Unique brand marks", filePrefix: "Logos", imgCount: 3 },
@@ -886,7 +890,9 @@
                         const option = document.createElement('option');
                         option.value = t.id;
                         option.textContent = t.label[currentLang];
-                        option.dataset.price = t.price;
+                        // Store both prices in data attributes
+                        option.dataset.priceUa = t.priceUa;
+                        option.dataset.priceUsd = t.priceUsd;
                         typeSelect.appendChild(option);
                     });
                     typeSelect.disabled = false;
@@ -913,16 +919,25 @@
 
             let total = 0;
             const selectedOption = typeSelect.options[typeSelect.selectedIndex];
+            
+            // Determine price key and currency symbol based on language
+            const priceKey = currentLang === 'ua' ? 'priceUa' : 'priceUsd';
+            const currency = currentLang === 'ua' ? 'грн' : '$';
 
-            if (selectedOption && selectedOption.dataset.price) {
-                total = parseInt(selectedOption.dataset.price);
+            if (selectedOption && selectedOption.dataset[priceKey]) {
+                total = parseInt(selectedOption.dataset[priceKey]);
             }
 
             if (urgentCheck.checked) {
                 total = Math.round(total * 1.3);
             }
 
-            totalDisplay.textContent = `${total} грн`;
+            // Display formatted price
+            if (currentLang === 'ua') {
+                totalDisplay.textContent = `${total} ${currency}`;
+            } else {
+                totalDisplay.textContent = `${currency}${total}`;
+            }
         }
         
         function updateOrderButtons() {
@@ -965,7 +980,9 @@
              document.getElementById('btn-instagram-text').textContent = t.calculator.btnInstagram;
              
              initCalculator();
-             document.getElementById('calc-total').textContent = '0 грн';
+             const currency = currentLang === 'ua' ? 'грн' : '$';
+             const startPrice = currentLang === 'ua' ? '0' : '0';
+             document.getElementById('calc-total').textContent = currentLang === 'ua' ? `${startPrice} ${currency}` : `${currency}${startPrice}`;
         }
 
         function renderProcess() {
@@ -1109,7 +1126,7 @@
             const y = e.clientY - rect.top;
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -20; 
+            const rotateX = ((y - centerY) / centerY) * -15; 
             const rotateY = ((x - centerX) / centerX) * 15;
             card.style.transition = 'transform 0.1s ease-out';
             card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
@@ -1119,6 +1136,18 @@
             const card = e.currentTarget;
             card.style.transition = 'transform 0.5s ease-out';
             card.style.transform = 'rotateX(0) rotateY(0)';
+        }
+
+        function updateTelegramLink() {
+            const telegramBtn = document.getElementById('btn-telegram');
+            const baseUrl = "https://t.me/Human0880";
+            if (selectedService) {
+                const prefix = translations[currentLang].contact.telegramMsgPrefix;
+                const message = encodeURIComponent(`${prefix}${selectedService}`);
+                telegramBtn.href = `${baseUrl}?text=${message}`;
+            } else {
+                telegramBtn.href = baseUrl;
+            }
         }
 
         function switchLanguage() {
