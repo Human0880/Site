@@ -113,6 +113,7 @@
         .card-3d {
             transform-style: preserve-3d;
             will-change: transform;
+            /* Ефект "вдавленості" для картки */
             box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.5);
         }
         
@@ -264,12 +265,69 @@
         .stat-item span {
             color: #a855f7;
         }
+        
+        /* Calculator Styles */
+        .form-select, .form-input, .form-checkbox {
+            appearance: none;
+            background-color: #18181b; /* zinc-900 */
+            border: 1px solid #3f3f46; /* zinc-700 */
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .form-select:focus, .form-input:focus {
+            border-color: #a855f7;
+        }
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .custom-checkbox {
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 1px solid #3f3f46;
+            border-radius: 0.25rem;
+            background-color: #18181b;
+            margin-right: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        input[type="checkbox"]:checked + .custom-checkbox {
+            background-color: #a855f7;
+            border-color: #a855f7;
+        }
+        input[type="checkbox"]:checked + .custom-checkbox svg {
+            opacity: 1;
+        }
+        
+        /* Back to top button */
+        #back-to-top {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out, transform 0.3s;
+        }
+        #back-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
     </style>
 </head>
 <body class="antialiased selection:bg-purple-500 selection:text-white relative">
 
     <div id="cursor-glow"></div>
     <div id="progress-bar" class="fixed top-0 left-0 h-1.5 bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-500 origin-left z-[60] w-0"></div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-6 right-6 z-50 w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-purple-500 hover:scale-110">
+        <i data-lucide="arrow-up" class="w-6 h-6"></i>
+    </button>
 
     <!-- Navbar -->
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6 bg-transparent">
@@ -281,6 +339,10 @@
             <div class="hidden md:flex space-x-12 absolute left-1/2 transform -translate-x-1/2">
                 <a href="#services" id="nav-services" class="text-gray-300 hover:text-white transition-colors uppercase text-sm tracking-widest font-medium relative group hover:scale-110 duration-300 inline-block">
                     Послуги
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-500 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#process" id="nav-process" class="text-gray-300 hover:text-white transition-colors uppercase text-sm tracking-widest font-medium relative group hover:scale-110 duration-300 inline-block">
+                    Процес
                     <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-500 transition-all duration-300 group-hover:w-full"></span>
                 </a>
                 <a href="#portfolio" id="nav-portfolio" class="text-gray-300 hover:text-white transition-colors uppercase text-sm tracking-widest font-medium relative group hover:scale-110 duration-300 inline-block">
@@ -303,6 +365,7 @@
         <div id="mobile-menu" class="hidden md:hidden bg-zinc-900 border-t border-zinc-800 overflow-hidden transition-all duration-300 ease-in-out">
             <div class="flex flex-col p-6 space-y-4">
                 <a href="#services" class="text-left text-gray-300 hover:text-white py-2 mobile-link" id="mob-nav-services">Послуги</a>
+                <a href="#process" class="text-left text-gray-300 hover:text-white py-2 mobile-link" id="mob-nav-process">Процес</a>
                 <a href="#portfolio" class="text-left text-gray-300 hover:text-white py-2 mobile-link" id="mob-nav-portfolio">Портфоліо</a>
                 <a href="#contact" class="text-left text-gray-300 hover:text-white py-2 mobile-link" id="mob-nav-contact">Контакти</a>
             </div>
@@ -321,17 +384,17 @@
             </h2>
             
             <div class="flex justify-center mb-6">
-                <!-- Premium Floating Logo Container (Size Increased) -->
-                <div class="relative w-56 h-56 md:w-96 md:h-96 flex items-center justify-center">
+                <!-- Premium Floating Logo Container (No Mouse Interaction) -->
+                <div class="relative w-40 h-40 md:w-64 md:h-64 flex items-center justify-center">
                     <!-- Breathing Glow -->
-                    <div class="absolute inset-0 bg-gradient-to-tr from-purple-600/50 to-pink-600/50 rounded-full blur-[60px] animate-breathing-glow"></div>
+                    <div class="absolute inset-0 bg-gradient-to-tr from-purple-600/50 to-pink-600/50 rounded-full blur-[50px] animate-breathing-glow"></div>
     
-                    <!-- Logo Image with Slow Float (Increased Size) -->
+                    <!-- Logo Image with Slow Float -->
                     <img 
                        src="IMG/logo.svg" 
                        id="main-logo-img"
                        alt="HUMAN0880 Logo" 
-                       class="relative h-32 md:h-60 object-contain drop-shadow-[0_0_40px_rgba(168,85,247,0.7)] z-10 animate-float-slow" 
+                       class="relative h-24 md:h-40 object-contain drop-shadow-[0_0_35px_rgba(168,85,247,0.7)] z-10 animate-float-slow" 
                        onerror="this.onerror=null; this.src='https://placehold.co/600x150/000000/FFFFFF/png?text=logo.svg+Not+Found'; alert('Файл IMG/logo.svg не знайдено.');"
                     />
                 </div>
@@ -342,12 +405,9 @@
             </p>
         </div>
 
-        <!-- Scroll Down Indicator (Fixed Centering) -->
-        <!-- Використовуємо flexbox для ідеального центрування без конфлікту з анімацією -->
-        <div class="absolute bottom-28 w-full flex justify-center z-20 pointer-events-none">
-            <div class="animate-bounce cursor-pointer pointer-events-auto" onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})">
-                <i data-lucide="chevron-down" class="w-8 h-8 text-white/50 hover:text-white transition-colors"></i>
-            </div>
+        <!-- Scroll Down Indicator -->
+        <div class="absolute bottom-32 left-1/2 transform -translate-x-1/2 animate-bounce z-20 cursor-pointer" onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})">
+            <i data-lucide="chevron-down" class="w-8 h-8 text-white/50 hover:text-white transition-colors"></i>
         </div>
 
         <!-- Stats Marquee -->
@@ -376,9 +436,23 @@
             </div>
         </div>
     </section>
+    
+    <!-- Process Section (NEW) -->
+    <section id="process" class="py-24 bg-black text-white relative">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-20 reveal">
+                <h2 id="process-title" class="text-3xl md:text-5xl font-bold mb-6">Як ми працюємо</h2>
+                 <div class="h-1 w-24 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="process-grid">
+                <!-- Process steps injected via JS -->
+            </div>
+        </div>
+    </section>
 
     <!-- Portfolio Section -->
-    <section id="portfolio" class="py-24 bg-black text-white overflow-hidden">
+    <section id="portfolio" class="py-24 bg-zinc-950 text-white overflow-hidden">
         <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
                 <div>
@@ -394,8 +468,8 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-24 bg-zinc-950 text-white relative overflow-hidden">
+    <!-- Contact & Calculator Section (Merged) -->
+    <section id="contact" class="py-24 bg-black text-white relative overflow-hidden">
         <div class="absolute top-0 right-0 w-3/4 h-full bg-purple-900/10 blur-[120px] pointer-events-none animate-pulse"></div>
         <div class="container mx-auto px-6 relative z-10">
             <div class="reveal mb-16 text-center max-w-5xl mx-auto">
@@ -403,6 +477,8 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                
+                <!-- Left Column: Contact Info -->
                 <div class="reveal delay-100 flex flex-col justify-start h-full pt-4">
                     <p id="contact-subtitle" class="text-gray-400 text-lg leading-relaxed mb-10 max-w-lg">
                         Готові розпочати проект? Напишіть нам, і ми обговоримо, як можемо допомогти вашому бізнесу вирости через дизайн.
@@ -431,24 +507,62 @@
                     </div>
                 </div>
 
+                <!-- Right Column: Calculator Form -->
                 <div class="bg-zinc-900/80 backdrop-blur-md p-8 md:p-10 rounded-2xl border border-zinc-800 shadow-2xl relative overflow-hidden reveal delay-200 flex flex-col">
                      <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500"></div>
-                    <div class="space-y-8 relative z-10">
-                        <div>
-                            <h3 id="contact-question" class="text-xl font-bold text-white mb-6">Що вас цікавить?</h3>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="service-options"></div>
+                    <div class="space-y-6 relative z-10">
+                        <div class="mb-2">
+                             <h3 id="calc-title" class="text-2xl font-bold text-white">Калькулятор Вартості</h3>
                         </div>
 
-                        <div class="space-y-4">
-                            <a id="btn-telegram" href="https://t.me/Human0880" target="_blank" class="w-full bg-[#229ED9] hover:bg-[#1E8BBF] text-white font-bold py-4 rounded-lg transition-all shadow-lg hover:shadow-[#229ED9]/30 flex items-center justify-center transform hover:scale-[1.02] active:scale-95 group">
+                        <form id="price-calculator" onsubmit="event.preventDefault()">
+                            <div class="space-y-4">
+                                <!-- Service Type -->
+                                <div>
+                                    <label id="label-service" class="block text-sm font-medium text-gray-400 mb-2">Оберіть послугу</label>
+                                    <select id="calc-service" class="form-select">
+                                        <!-- Options populated by JS -->
+                                    </select>
+                                </div>
+        
+                                <!-- Complexity/Type -->
+                                <div>
+                                    <label id="label-type" class="block text-sm font-medium text-gray-400 mb-2">Тип / Складність</label>
+                                    <select id="calc-type" class="form-select" disabled>
+                                        <option value="">-</option>
+                                    </select>
+                                </div>
+        
+                                <!-- Urgency -->
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" id="calc-urgent" class="hidden">
+                                    <div class="custom-checkbox">
+                                        <i data-lucide="check" class="w-4 h-4 text-white opacity-0 transition-opacity"></i>
+                                    </div>
+                                    <span id="label-urgent" class="text-gray-300">Термінове виконання (+30%)</span>
+                                </label>
+        
+                                <!-- Total Price -->
+                                <div class="pt-4 border-t border-zinc-800 flex justify-between items-center mb-4">
+                                    <span id="label-total" class="text-xl font-bold text-gray-400">Орієнтовна вартість:</span>
+                                    <span id="calc-total" class="text-2xl font-bold text-purple-400">0 грн</span>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Action Buttons -->
+                        <div class="space-y-3">
+                            <a id="btn-telegram" href="https://t.me/Human0880" target="_blank" class="w-full bg-[#229ED9] hover:bg-[#1E8BBF] text-white font-bold py-3 rounded-lg transition-all shadow-lg hover:shadow-[#229ED9]/30 flex items-center justify-center transform hover:scale-[1.02] active:scale-95 group">
                                 <i data-lucide="send" class="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform"></i>
-                                <span id="btn-telegram-text">Написати в Telegram</span>
+                                <span id="btn-telegram-text">Замовити (Telegram)</span>
                             </a>
-                            <a href="https://instagram.com/human0880design" target="_blank" class="w-full bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] hover:opacity-90 text-white font-bold py-4 rounded-lg transition-all shadow-lg hover:shadow-[#fd1d1d]/30 flex items-center justify-center transform hover:scale-[1.02] active:scale-95 group">
+                            <a href="https://instagram.com/human0880design" target="_blank" class="w-full bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] hover:opacity-90 text-white font-bold py-3 rounded-lg transition-all shadow-lg hover:shadow-[#fd1d1d]/30 flex items-center justify-center transform hover:scale-[1.02] active:scale-95 group">
                                 <i data-lucide="instagram" class="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform"></i>
-                                <span id="btn-instagram-text">Написати в Instagram</span>
+                                <span id="btn-instagram-text">Замовити (Instagram)</span>
                             </a>
                         </div>
+                        <p class="text-xs text-gray-600 text-center">* Ціна може змінюватись в залежності від ТЗ.</p>
+
                     </div>
                 </div>
             </div>
@@ -471,9 +585,74 @@
 
     <!-- JavaScript -->
     <script>
+        // PRICING DATA (UAH)
+        const pricingData = {
+            identity: {
+                types: [
+                    { id: 'logo', label: { ua: 'Логотип', en: 'Logo' }, price: 500 },
+                    { id: 'guide', label: { ua: 'Лого + Міні-гід', en: 'Logo + Mini Guide' }, price: 1500 },
+                    { id: 'brandbook', label: { ua: 'Міні-Брендбук', en: 'Mini Brandbook' }, price: 3000 }
+                ]
+            },
+            outdoor: {
+                types: [
+                    { id: 'banner', label: { ua: 'Сітілайт / Борд / Банер', en: 'Citylight / Board / Banner' }, price: 400 },
+                    { id: 'adapt', label: { ua: 'Комплект адаптацій', en: 'Adaptation Set' }, price: 550 }
+                ]
+            },
+            presentation: {
+                types: [
+                    { id: 'slide', label: { ua: '1 слайд', en: '1 slide' }, price: 70 },
+                    { id: 'std', label: { ua: 'До 15 слайдів', en: 'Up to 15 slides' }, price: 1000 },
+                    { id: 'ext', label: { ua: 'Розширена (25+ слайдів)', en: 'Extended (25+ slides)' }, price: 1800 }
+                ]
+            },
+            print: {
+                types: [
+                    { id: 'poster', label: { ua: 'Постер / Афіша', en: 'Poster / Affiche' }, price: 350 },
+                    { id: 'flyer', label: { ua: 'Флаєр A5', en: 'Flyer A5' }, price: 300 },
+                    { id: 'brochure', label: { ua: 'Брошура (до 8 стор.)', en: 'Brochure (up to 8 pages)' }, price: 700 },
+                    { id: 'magazine', label: { ua: 'Журнал (10-20 стор.)', en: 'Magazine (10-20 pages)' }, price: 1300 }
+                ]
+            },
+            invitations: {
+                types: [
+                    { id: 'single', label: { ua: 'Один макет', en: 'One layout' }, price: 250 },
+                    { id: 'choice', label: { ua: 'Два стилі на вибір', en: 'Two styles choice' }, price: 400 }
+                ]
+            },
+            social: {
+                types: [
+                    { id: 'banner', label: { ua: 'Банер Instagram/FB', en: 'Banner Insta/FB' }, price: 200 },
+                    { id: 'pack', label: { ua: 'Пакет (5 банерів)', en: 'Pack (5 banners)' }, price: 900 },
+                    { id: 'profile', label: { ua: 'Обкладинка + аватар + шаблон', en: 'Cover + Avatar + Template' }, price: 500 }
+                ]
+            },
+            packaging: {
+                types: [
+                    { id: 'label', label: { ua: 'Етикетка / стікер', en: 'Label / Sticker' }, price: 500 },
+                    { id: 'box', label: { ua: 'Дизайн коробки', en: 'Box Design' }, price: 1000 }
+                ]
+            },
+            photo: {
+                types: [
+                    { id: 'light', label: { ua: 'Легка ретуш', en: 'Light Retouch' }, price: 40 },
+                    { id: 'pro', label: { ua: 'Професійна ретуш', en: 'Pro Retouch' }, price: 100 },
+                    { id: 'art', label: { ua: 'Художня обробка', en: 'Artistic Editing' }, price: 150 }
+                ]
+            },
+            web: {
+                types: [
+                    { id: 'landing', label: { ua: 'Лендінг (1 сторінка)', en: 'Landing (1 page)' }, price: 1600 },
+                    { id: 'site', label: { ua: 'Сайт 3-5 сторінок', en: 'Site 3-5 pages' }, price: 3500 },
+                    { id: 'app', label: { ua: 'UI/UX додатку', en: 'App UI/UX' }, price: 5000 }
+                ]
+            }
+        };
+
         const translations = {
             ua: {
-                nav: { services: "Послуги", portfolio: "Портфоліо", contact: "Контакти" },
+                nav: { services: "Послуги", process: "Процес", portfolio: "Портфоліо", contact: "Контакти" },
                 hero: {
                     typewriter: "Айдентика та Веб-Дизайн", 
                     desc: "Ми перетворюємо хаос ідей на структуру дизайну. Комплексні рішення для вашого бізнесу: від логотипу до веб-сайту."
@@ -500,6 +679,15 @@
                         { title: "Веб-Дизайн / Дизайн APP", description: "Забезпечте своєму сайту чи додатку неповторний вигляд, UX/UI дизайн та зручність користування.", icon: "smartphone", color: "from-indigo-500 to-purple-500" }
                     ]
                 },
+                process: {
+                    title: "Як ми працюємо",
+                    items: [
+                        { step: "01", title: "Бриф", desc: "Обговорення задачі та цілей проекту." },
+                        { step: "02", title: "Дослідження", desc: "Аналіз ринку та конкурентів." },
+                        { step: "03", title: "Дизайн", desc: "Створення концептів та візуалізації." },
+                        { step: "04", title: "Результат", desc: "Передача готових файлів." }
+                    ]
+                },
                 portfolio: {
                     title: "Наші Роботи",
                     items: [
@@ -518,10 +706,33 @@
                     btnInstagram: "Написати в Instagram",
                     telegramMsgPrefix: "Вітаю! Мене цікавить послуга: "
                 },
+                calculator: {
+                    title: "Калькулятор Вартості",
+                    desc: "Дізнайтеся орієнтовну вартість вашого проекту.",
+                    labels: {
+                        service: "Оберіть послугу",
+                        type: "Тип / Складність",
+                        urgent: "Термінове виконання (+30%)",
+                        total: "Орієнтовна вартість:"
+                    },
+                    servicesList: [
+                        { id: 'identity', name: 'Фірмовий Стиль / Логотип' },
+                        { id: 'outdoor', name: 'Зовнішня Реклама' },
+                        { id: 'presentation', name: 'Презентації' },
+                        { id: 'print', name: 'Брошури / Постери / Поліграфія' },
+                        { id: 'invitations', name: 'Запрошення' },
+                        { id: 'social', name: 'Банери для Соцмереж' },
+                        { id: 'packaging', name: 'Дизайн Упаковки' },
+                        { id: 'photo', name: 'Обробка Фото' },
+                        { id: 'web', name: 'Web / App Design' }
+                    ],
+                    btnTelegram: "Замовити (Telegram)",
+                    btnInstagram: "Замовити (Instagram)"
+                },
                 footer: { rights: "Всі права захищено." }
             },
             en: {
-                nav: { services: "Services", portfolio: "Portfolio", contact: "Contact" },
+                nav: { services: "Services", process: "Process", portfolio: "Portfolio", contact: "Contact" },
                 hero: {
                     typewriter: "Visual Identity & Web Design",
                     desc: "We turn chaos of ideas into design structure. Complex solutions for your business: from logo to website."
@@ -548,6 +759,15 @@
                         { title: "Web Design / APP Design", description: "Ensure your site or app has a unique look, UX/UI design, and usability.", icon: "smartphone", color: "from-indigo-500 to-purple-500" }
                     ]
                 },
+                process: {
+                    title: "How We Work",
+                    items: [
+                        { step: "01", title: "Briefing", desc: "Discussing tasks and project goals." },
+                        { step: "02", title: "Research", desc: "Market and competitor analysis." },
+                        { step: "03", title: "Design", desc: "Creating concepts and visualization." },
+                        { step: "04", title: "Delivery", desc: "Handover of final files." }
+                    ]
+                },
                 portfolio: {
                     title: "Our Works",
                     items: [
@@ -560,19 +780,38 @@
                 contact: {
                     title: "Let's create something <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500'>unique</span> together.",
                     subtitle: "Ready to start a project? Write to us, and we will discuss how we can help your business grow through design.",
-                    question: "What are you interested in?",
-                    chips: ["Brand Identity", "Outdoor Ads", "Presentations", "Brochures/Posters", "Invitations", "Banners", "Packaging", "Photo Edit", "Web/APP Design"],
-                    btnTelegram: "Write on Telegram",
-                    btnInstagram: "Write on Instagram",
-                    telegramMsgPrefix: "Hello! I am interested in: "
+                    telegramMsgPrefix: "Hello! I am interested in: ",
+                    urgentText: "Urgent"
+                },
+                calculator: {
+                    title: "Cost Calculator",
+                    desc: "Get an estimated cost for your project.",
+                    labels: {
+                        service: "Select Service",
+                        type: "Type / Complexity",
+                        urgent: "Urgent (+30%)",
+                        total: "Estimated Cost:"
+                    },
+                    servicesList: [
+                        { id: 'identity', name: 'Brand Identity' },
+                        { id: 'outdoor', name: 'Outdoor Ads' },
+                        { id: 'presentation', name: 'Presentations' },
+                        { id: 'print', name: 'Print Media' },
+                        { id: 'invitations', name: 'Invitations' },
+                        { id: 'social', name: 'Social Media' },
+                        { id: 'packaging', name: 'Packaging' },
+                        { id: 'photo', name: 'Photo Editing' },
+                        { id: 'web', name: 'Web / App Design' }
+                    ],
+                    btnTelegram: "Order (Telegram)",
+                    btnInstagram: "Order (Instagram)"
                 },
                 footer: { rights: "All rights reserved." }
             }
         };
 
         let currentLang = 'ua';
-        let selectedService = "";
-
+        
         const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -615,12 +854,153 @@
             });
         }
 
+        // --- CALCULATOR FUNCTIONS ---
+        function initCalculator() {
+            const serviceSelect = document.getElementById('calc-service');
+            const typeSelect = document.getElementById('calc-type');
+            const urgentCheck = document.getElementById('calc-urgent');
+            
+            // Initial buttons update
+            updateOrderButtons();
+
+            // Populate Services
+            const updateServicesDropdown = () => {
+                serviceSelect.innerHTML = '<option value="">-</option>';
+                translations[currentLang].calculator.servicesList.forEach(s => {
+                    const option = document.createElement('option');
+                    option.value = s.id;
+                    option.textContent = s.name;
+                    serviceSelect.appendChild(option);
+                });
+            };
+            updateServicesDropdown();
+
+            // Handle Change
+            serviceSelect.addEventListener('change', () => {
+                const serviceKey = serviceSelect.value;
+                typeSelect.innerHTML = '<option value="">-</option>';
+                typeSelect.disabled = true;
+
+                if (serviceKey && pricingData[serviceKey]) {
+                    pricingData[serviceKey].types.forEach(t => {
+                        const option = document.createElement('option');
+                        option.value = t.id;
+                        option.textContent = t.label[currentLang];
+                        option.dataset.price = t.price;
+                        typeSelect.appendChild(option);
+                    });
+                    typeSelect.disabled = false;
+                }
+                calculateTotal();
+                updateOrderButtons();
+            });
+
+            typeSelect.addEventListener('change', () => {
+                calculateTotal();
+                updateOrderButtons();
+            });
+            
+            urgentCheck.addEventListener('change', () => {
+                calculateTotal();
+                updateOrderButtons();
+            });
+        }
+
+        function calculateTotal() {
+            const typeSelect = document.getElementById('calc-type');
+            const urgentCheck = document.getElementById('calc-urgent');
+            const totalDisplay = document.getElementById('calc-total');
+
+            let total = 0;
+            const selectedOption = typeSelect.options[typeSelect.selectedIndex];
+
+            if (selectedOption && selectedOption.dataset.price) {
+                total = parseInt(selectedOption.dataset.price);
+            }
+
+            if (urgentCheck.checked) {
+                total = Math.round(total * 1.3);
+            }
+
+            totalDisplay.textContent = `${total} грн`;
+        }
+        
+        function updateOrderButtons() {
+            const serviceSelect = document.getElementById('calc-service');
+            const typeSelect = document.getElementById('calc-type');
+            const urgentCheck = document.getElementById('calc-urgent');
+            const telegramBtn = document.getElementById('btn-telegram');
+            const baseUrl = "https://t.me/Human0880";
+            
+            let message = translations[currentLang].contact.telegramMsgPrefix;
+            
+            if (serviceSelect.value) {
+                const serviceName = serviceSelect.options[serviceSelect.selectedIndex].text;
+                message += `${serviceName}`;
+                
+                if (typeSelect.value) {
+                     const typeName = typeSelect.options[typeSelect.selectedIndex].text;
+                     message += ` - ${typeName}`;
+                }
+                
+                if (urgentCheck.checked) {
+                    message += ` (${translations[currentLang].contact.urgentText})`;
+                }
+            } else {
+                 // Default simple message if nothing selected
+            }
+            
+            telegramBtn.href = `${baseUrl}?text=${encodeURIComponent(message)}`;
+        }
+        
+        function updateCalculatorText() {
+             const t = translations[currentLang];
+             document.getElementById('calc-title').textContent = t.calculator.title;
+             // REMOVED line that caused error
+             document.getElementById('label-service').textContent = t.calculator.labels.service;
+             document.getElementById('label-type').textContent = t.calculator.labels.type;
+             document.getElementById('label-urgent').textContent = t.calculator.labels.urgent;
+             document.getElementById('label-total').textContent = t.calculator.labels.total;
+             document.getElementById('btn-telegram-text').textContent = t.calculator.btnTelegram;
+             document.getElementById('btn-instagram-text').textContent = t.calculator.btnInstagram;
+             
+             initCalculator();
+             document.getElementById('calc-total').textContent = '0 грн';
+        }
+
+        function renderProcess() {
+            const processGrid = document.getElementById('process-grid');
+            if(!processGrid) return;
+            processGrid.innerHTML = '';
+            const t = translations[currentLang];
+            
+            // Title
+            document.getElementById('process-title').textContent = t.process.title;
+
+            t.process.items.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = "bg-zinc-900 border border-zinc-800 p-8 rounded-2xl relative overflow-hidden group hover:border-purple-500/50 transition-colors duration-300 reveal";
+                card.style.transitionDelay = `${index * 100}ms`;
+                card.innerHTML = `
+                    <div class="absolute -right-4 -top-4 text-8xl font-black text-zinc-800/30 group-hover:text-purple-900/20 transition-colors duration-300 select-none">${item.step}</div>
+                    <div class="relative z-10">
+                        <h3 class="text-xl font-bold mb-3 text-white">${item.title}</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">${item.desc}</p>
+                    </div>
+                `;
+                processGrid.appendChild(card);
+            });
+             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
         function updateStaticText() {
             const t = translations[currentLang];
             document.getElementById('nav-services').childNodes[0].nodeValue = t.nav.services;
+            document.getElementById('nav-process').childNodes[0].nodeValue = t.nav.process; // New nav item
             document.getElementById('nav-portfolio').childNodes[0].nodeValue = t.nav.portfolio;
             document.getElementById('nav-contact').childNodes[0].nodeValue = t.nav.contact;
             document.getElementById('mob-nav-services').textContent = t.nav.services;
+            document.getElementById('mob-nav-process').textContent = t.nav.process; // New mobile nav item
             document.getElementById('mob-nav-portfolio').textContent = t.nav.portfolio;
             document.getElementById('mob-nav-contact').textContent = t.nav.contact;
             const heroDesc = document.getElementById('hero-desc');
@@ -630,10 +1010,10 @@
             document.getElementById('portfolio-title').textContent = t.portfolio.title;
             document.getElementById('contact-title').innerHTML = t.contact.title;
             document.getElementById('contact-subtitle').textContent = t.contact.subtitle;
-            document.getElementById('contact-question').textContent = t.contact.question;
-            document.getElementById('btn-telegram-text').textContent = t.contact.btnTelegram;
-            document.getElementById('btn-instagram-text').textContent = t.contact.btnInstagram;
             document.getElementById('footer-rights').textContent = t.footer.rights;
+            
+            renderProcess(); // Call renderProcess inside updateStaticText to handle language switch
+            updateCalculatorText();
         }
 
         function renderServices() {
@@ -701,26 +1081,6 @@
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
-        function renderContactChips() {
-            const serviceOptionsContainer = document.getElementById('service-options');
-            serviceOptionsContainer.innerHTML = '';
-            const t = translations[currentLang];
-            selectedService = ""; 
-            updateTelegramLink();
-            t.contact.chips.forEach(srv => {
-                const btn = document.createElement('button');
-                btn.textContent = srv;
-                btn.className = "service-btn border border-zinc-700 bg-zinc-900/50 text-gray-400 px-4 py-3 rounded-lg text-sm font-medium hover:border-purple-500 hover:text-white transition-all duration-200 text-left";
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.service-btn').forEach(b => b.classList.remove('selected'));
-                    btn.classList.add('selected');
-                    selectedService = srv;
-                    updateTelegramLink();
-                });
-                serviceOptionsContainer.appendChild(btn);
-            });
-        }
-
         let textToType = "";
         const typeWriterElement = document.getElementById('typewriter-text');
         let charIndex = 0;
@@ -749,7 +1109,7 @@
             const y = e.clientY - rect.top;
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -15; 
+            const rotateX = ((y - centerY) / centerY) * -20; 
             const rotateY = ((x - centerX) / centerX) * 15;
             card.style.transition = 'transform 0.1s ease-out';
             card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
@@ -761,18 +1121,6 @@
             card.style.transform = 'rotateX(0) rotateY(0)';
         }
 
-        function updateTelegramLink() {
-            const telegramBtn = document.getElementById('btn-telegram');
-            const baseUrl = "https://t.me/Human0880";
-            if (selectedService) {
-                const prefix = translations[currentLang].contact.telegramMsgPrefix;
-                const message = encodeURIComponent(`${prefix}${selectedService}`);
-                telegramBtn.href = `${baseUrl}?text=${message}`;
-            } else {
-                telegramBtn.href = baseUrl;
-            }
-        }
-
         function switchLanguage() {
             currentLang = currentLang === 'ua' ? 'en' : 'ua';
             const btn = document.getElementById('lang-switch');
@@ -782,7 +1130,6 @@
             renderStatsMarquee();
             renderServices();
             renderPortfolio();
-            renderContactChips();
             startTypewriter();
         }
 
@@ -795,8 +1142,8 @@
             renderStatsMarquee();
             renderServices();
             renderPortfolio();
-            renderContactChips();
             startTypewriter();
+            initCalculator();
 
             lucide.createIcons();
             document.getElementById('year').textContent = new Date().getFullYear();
@@ -829,7 +1176,12 @@
 
             const navbar = document.getElementById('navbar');
             const progressBar = document.getElementById('progress-bar');
+            
+            // BACK TO TOP LOGIC
+            const backToTopBtn = document.getElementById('back-to-top');
+
             window.addEventListener('scroll', () => {
+                // Navbar transparency logic
                 if (window.scrollY > 50) {
                     navbar.classList.remove('bg-transparent', 'py-6');
                     navbar.classList.add('bg-black/80', 'backdrop-blur-md', 'py-4', 'shadow-lg', 'shadow-purple-900/10');
@@ -837,6 +1189,14 @@
                     navbar.classList.add('bg-transparent', 'py-6');
                     navbar.classList.remove('bg-black/80', 'backdrop-blur-md', 'py-4', 'shadow-lg', 'shadow-purple-900/10');
                 }
+                
+                // Back to Top button visibility (show after 100vh / one screen height)
+                if (window.scrollY > window.innerHeight) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+
                 const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
                 const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
                 const scrollPercentage = (scrollTop / scrollHeight) * 100;
