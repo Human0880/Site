@@ -30,6 +30,7 @@
                         'marquee': 'marquee var(--marquee-duration) linear infinite',
                         'float-slow': 'float 8s ease-in-out infinite',
                         'breathing-glow': 'breathing-glow 5s ease-in-out infinite alternate',
+                        'spin-slow': 'spin 60s linear infinite',
                     },
                     keyframes: {
                         float: {
@@ -316,6 +317,50 @@
             pointer-events: auto;
         }
 
+        /* NEW: Neon Border Animation for Process Cards */
+        @keyframes border-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .process-card {
+            position: relative;
+            background: #18181b; /* Inner background matching theme */
+            border-radius: 1rem;
+            overflow: hidden;
+            z-index: 1;
+            isolation: isolate;
+        }
+        
+        .process-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent 70%, #a855f7, #ec4899, transparent);
+            animation: border-spin 4s linear infinite;
+            z-index: -2;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        /* Show gradient border on hover */
+        .process-card:hover::before {
+            opacity: 1;
+        }
+        
+        /* Inner container to cover the rotating gradient center */
+        .process-card::after {
+            content: '';
+            position: absolute;
+            inset: 2px; /* Border width */
+            background: #18181b; /* Should match the card background */
+            border-radius: 1rem;
+            z-index: -1;
+        }
+
     </style>
 </head>
 <body class="antialiased selection:bg-purple-500 selection:text-white relative">
@@ -383,17 +428,17 @@
             </h2>
             
             <div class="flex justify-center mb-6">
-                <!-- Premium Floating Logo Container (No Mouse Interaction) -->
-                <div class="relative w-40 h-40 md:w-64 md:h-64 flex items-center justify-center">
+                <!-- Premium Floating Logo Container (Size Increased) -->
+                <div class="relative w-60 h-60 md:w-[30rem] md:h-[30rem] flex items-center justify-center">
                     <!-- Breathing Glow -->
-                    <div class="absolute inset-0 bg-gradient-to-tr from-purple-600/50 to-pink-600/50 rounded-full blur-[50px] animate-breathing-glow"></div>
+                    <div class="absolute inset-0 bg-gradient-to-tr from-purple-600/50 to-pink-600/50 rounded-full blur-[60px] animate-breathing-glow"></div>
     
-                    <!-- Logo Image with Slow Float -->
+                    <!-- Logo Image with Slow Float (Increased Size) -->
                     <img 
                        src="IMG/logo.svg" 
                        id="main-logo-img"
                        alt="HUMAN0880 Logo" 
-                       class="relative h-24 md:h-40 object-contain drop-shadow-[0_0_35px_rgba(168,85,247,0.7)] z-10 animate-float-slow" 
+                       class="relative h-48 md:h-80 object-contain drop-shadow-[0_0_50px_rgba(168,85,247,0.8)] z-10 animate-float-slow" 
                        onerror="this.onerror=null; this.src='https://placehold.co/600x150/000000/FFFFFF/png?text=logo.svg+Not+Found'; alert('Файл IMG/logo.svg не знайдено.');"
                     />
                 </div>
@@ -423,9 +468,9 @@
 
     <!-- Services Section -->
     <section id="services" class="py-24 bg-zinc-950 text-white relative overflow-hidden">
-        <!-- New Background Effect: Logo Watermark -->
+        <!-- New Background Effect: Logo Watermark (Restored to large spinning logo) -->
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] opacity-[0.03] pointer-events-none z-0">
-             <img src="IMG/logo.svg" class="w-full h-full object-contain animate-spin-slow" alt="">
+             <img src="IMG/logo.svg" class="w-full h-full object-contain" alt="">
         </div>
 
         <div class="container mx-auto px-6 relative z-10">
@@ -659,7 +704,7 @@
 
         const translations = {
             ua: {
-                nav: { services: "Послуги", process: "Процес", portfolio: "Портфоліо", contact: "Контакти" },
+                nav: { services: "Послуги", process: "Процес", portfolio: "Роботи", contact: "Контакти" },
                 hero: {
                     typewriter: "Айдентика та Веб-Дизайн", 
                     desc: "Ми перетворюємо хаос ідей на структуру дизайну. Комплексні рішення для вашого бізнесу: від логотипу до веб-сайту."
@@ -815,7 +860,8 @@
         };
 
         let currentLang = 'ua';
-        
+        let selectedService = "";
+
         const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -971,7 +1017,7 @@
         function updateCalculatorText() {
              const t = translations[currentLang];
              document.getElementById('calc-title').textContent = t.calculator.title;
-             // REMOVED line that caused error
+             // REMOVED line that caused error: document.getElementById('calc-desc').textContent = t.calculator.desc;
              document.getElementById('label-service').textContent = t.calculator.labels.service;
              document.getElementById('label-type').textContent = t.calculator.labels.type;
              document.getElementById('label-urgent').textContent = t.calculator.labels.urgent;
@@ -979,10 +1025,8 @@
              document.getElementById('btn-telegram-text').textContent = t.calculator.btnTelegram;
              document.getElementById('btn-instagram-text').textContent = t.calculator.btnInstagram;
              
-             initCalculator();
-             const currency = currentLang === 'ua' ? 'грн' : '$';
-             const startPrice = currentLang === 'ua' ? '0' : '0';
-             document.getElementById('calc-total').textContent = currentLang === 'ua' ? `${startPrice} ${currency}` : `${currency}${startPrice}`;
+             initCalculator(); // Repopulate options with new language
+             document.getElementById('calc-total').textContent = currentLang === 'ua' ? '0 грн' : '$0';
         }
 
         function renderProcess() {
@@ -996,7 +1040,7 @@
 
             t.process.items.forEach((item, index) => {
                 const card = document.createElement('div');
-                card.className = "bg-zinc-900 border border-zinc-800 p-8 rounded-2xl relative overflow-hidden group hover:border-purple-500/50 transition-colors duration-300 reveal";
+                card.className = "process-card bg-zinc-900 border border-zinc-800 p-8 rounded-2xl relative overflow-hidden group transition-colors duration-300 reveal";
                 card.style.transitionDelay = `${index * 100}ms`;
                 card.innerHTML = `
                     <div class="absolute -right-4 -top-4 text-8xl font-black text-zinc-800/30 group-hover:text-purple-900/20 transition-colors duration-300 select-none">${item.step}</div>
@@ -1009,6 +1053,7 @@
             });
              document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
+
 
         function updateStaticText() {
             const t = translations[currentLang];
