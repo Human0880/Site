@@ -468,7 +468,7 @@
 
     <!-- Services Section -->
     <section id="services" class="py-24 bg-zinc-950 text-white relative overflow-hidden">
-        <!-- New Background Effect: Logo Watermark (Restored to large spinning logo) -->
+        <!-- New Background Effect: Static Semi-Transparent Logo Watermark (No Animation) -->
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] opacity-[0.03] pointer-events-none z-0">
              <img src="IMG/logo.svg" class="w-full h-full object-contain" alt="">
         </div>
@@ -505,11 +505,11 @@
     <!-- Portfolio Section -->
     <section id="portfolio" class="py-24 bg-zinc-950 text-white overflow-hidden">
         <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
-                <div>
+            <div class="flex flex-col items-center md:flex-row md:justify-between md:items-end mb-16 reveal">
+                <div class="text-center md:text-left">
                     <!-- Updated ID for title -->
                     <h2 id="portfolio-title" class="text-4xl md:text-5xl font-bold mb-4">Роботи</h2>
-                    <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
+                    <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto md:mx-0"></div>
                 </div>
             </div>
 
@@ -612,7 +612,8 @@
                                 <span id="btn-instagram-text">Замовити (Instagram)</span>
                             </a>
                         </div>
-                        <p class="text-xs text-gray-600 text-center">* Ціна може змінюватись в залежності від ТЗ.</p>
+                        <!-- Added ID for translation -->
+                        <p id="calc-disclaimer" class="text-xs text-gray-600 text-center">* Ціна може змінюватись в залежності від ТЗ.</p>
 
                     </div>
                 </div>
@@ -622,14 +623,9 @@
 
     <!-- Footer -->
     <footer class="bg-black text-white border-t border-zinc-900 py-12">
-        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-y-4 items-center">
-            <div class="hidden md:block"></div>
+        <div class="container mx-auto px-6 flex justify-center items-center">
             <div class="text-gray-500 text-sm text-center whitespace-nowrap">
                 © <span id="year"></span> Human0880 Design. <span id="footer-rights">Всі права захищено.</span>
-            </div>
-            <div class="flex justify-center md:justify-end space-x-6">
-                <a href="https://instagram.com/human0880design" target="_blank" class="text-gray-500 hover:text-white hover:scale-125 transition-all duration-300"><i data-lucide="instagram" class="w-5 h-5"></i></a>
-                <a href="https://t.me/Human0880" target="_blank" class="text-gray-500 hover:text-white hover:scale-125 transition-all duration-300"><i data-lucide="send" class="w-5 h-5"></i></a>
             </div>
         </div>
     </footer>
@@ -758,6 +754,7 @@
                 calculator: {
                     title: "Калькулятор Вартості",
                     desc: "Дізнайтеся орієнтовну вартість вашого проекту.",
+                    disclaimer: "* Ціна може змінюватись в залежності від ТЗ.",
                     labels: {
                         service: "Оберіть послугу",
                         type: "Тип / Складність",
@@ -835,6 +832,7 @@
                 calculator: {
                     title: "Cost Calculator",
                     desc: "Get an estimated cost for your project.",
+                    disclaimer: "* Price may vary depending on technical requirements.",
                     labels: {
                         service: "Select Service",
                         type: "Type / Complexity",
@@ -1024,34 +1022,10 @@
              document.getElementById('label-total').textContent = t.calculator.labels.total;
              document.getElementById('btn-telegram-text').textContent = t.calculator.btnTelegram;
              document.getElementById('btn-instagram-text').textContent = t.calculator.btnInstagram;
+             document.getElementById('calc-disclaimer').textContent = t.calculator.disclaimer;
              
              initCalculator(); // Repopulate options with new language
              document.getElementById('calc-total').textContent = currentLang === 'ua' ? '0 грн' : '$0';
-        }
-
-        function renderProcess() {
-            const processGrid = document.getElementById('process-grid');
-            if(!processGrid) return;
-            processGrid.innerHTML = '';
-            const t = translations[currentLang];
-            
-            // Title
-            document.getElementById('process-title').textContent = t.process.title;
-
-            t.process.items.forEach((item, index) => {
-                const card = document.createElement('div');
-                card.className = "process-card bg-zinc-900 border border-zinc-800 p-8 rounded-2xl relative overflow-hidden group transition-colors duration-300 reveal";
-                card.style.transitionDelay = `${index * 100}ms`;
-                card.innerHTML = `
-                    <div class="absolute -right-4 -top-4 text-8xl font-black text-zinc-800/30 group-hover:text-purple-900/20 transition-colors duration-300 select-none">${item.step}</div>
-                    <div class="relative z-10">
-                        <h3 class="text-xl font-bold mb-3 text-white">${item.title}</h3>
-                        <p class="text-gray-400 text-sm leading-relaxed">${item.desc}</p>
-                    </div>
-                `;
-                processGrid.appendChild(card);
-            });
-             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
 
@@ -1076,6 +1050,31 @@
             
             renderProcess(); // Call renderProcess inside updateStaticText to handle language switch
             updateCalculatorText();
+        }
+        
+        function renderProcess() {
+            const processGrid = document.getElementById('process-grid');
+            if(!processGrid) return;
+            processGrid.innerHTML = '';
+            const t = translations[currentLang];
+            
+            // Title
+            document.getElementById('process-title').textContent = t.process.title;
+
+            t.process.items.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = "process-card bg-zinc-900 border border-zinc-800 p-8 rounded-2xl relative overflow-hidden group transition-colors duration-300 reveal";
+                card.style.transitionDelay = `${index * 100}ms`;
+                card.innerHTML = `
+                    <div class="absolute -right-4 -top-4 text-8xl font-black text-zinc-800/30 group-hover:text-purple-900/20 transition-colors duration-300 select-none">${item.step}</div>
+                    <div class="relative z-10">
+                        <h3 class="text-xl font-bold mb-3 text-white">${item.title}</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">${item.desc}</p>
+                    </div>
+                `;
+                processGrid.appendChild(card);
+            });
+             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
         function renderServices() {
@@ -1171,7 +1170,7 @@
             const y = e.clientY - rect.top;
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -15; 
+            const rotateX = ((y - centerY) / centerY) * -20; 
             const rotateY = ((x - centerX) / centerX) * 15;
             card.style.transition = 'transform 0.1s ease-out';
             card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
@@ -1250,12 +1249,7 @@
 
             const navbar = document.getElementById('navbar');
             const progressBar = document.getElementById('progress-bar');
-            
-            // BACK TO TOP LOGIC
-            const backToTopBtn = document.getElementById('back-to-top');
-
             window.addEventListener('scroll', () => {
-                // Navbar transparency logic
                 if (window.scrollY > 50) {
                     navbar.classList.remove('bg-transparent', 'py-6');
                     navbar.classList.add('bg-black/80', 'backdrop-blur-md', 'py-4', 'shadow-lg', 'shadow-purple-900/10');
@@ -1263,14 +1257,6 @@
                     navbar.classList.add('bg-transparent', 'py-6');
                     navbar.classList.remove('bg-black/80', 'backdrop-blur-md', 'py-4', 'shadow-lg', 'shadow-purple-900/10');
                 }
-                
-                // Back to Top button visibility (show after 100vh / one screen height)
-                if (window.scrollY > window.innerHeight) {
-                    backToTopBtn.classList.add('visible');
-                } else {
-                    backToTopBtn.classList.remove('visible');
-                }
-
                 const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
                 const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
                 const scrollPercentage = (scrollTop / scrollHeight) * 100;
