@@ -342,9 +342,12 @@
             </p>
         </div>
 
-        <!-- Scroll Down Indicator (Centered horizontally) -->
-        <div class="absolute bottom-32 left-1/2 transform -translate-x-1/2 animate-bounce z-20 cursor-pointer" onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})">
-            <i data-lucide="chevron-down" class="w-8 h-8 text-white/50 hover:text-white transition-colors"></i>
+        <!-- Scroll Down Indicator (Fixed Centering) -->
+        <!-- Використовуємо flexbox для ідеального центрування без конфлікту з анімацією -->
+        <div class="absolute bottom-28 w-full flex justify-center z-20 pointer-events-none">
+            <div class="animate-bounce cursor-pointer pointer-events-auto" onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})">
+                <i data-lucide="chevron-down" class="w-8 h-8 text-white/50 hover:text-white transition-colors"></i>
+            </div>
         </div>
 
         <!-- Stats Marquee -->
